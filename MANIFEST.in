@@ -1,0 +1,8 @@
+include README.md
+include requirements.txt
+include LICENSE
+recursive-include doc_viewer/templates *.html
+recursive-include doc *.md
+recursive-include doc_gallery *.md
+global-exclude __pycache__
+global-exclude *.py[co]

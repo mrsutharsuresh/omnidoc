@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OmniDoc | Executive Documentation Platform</title>
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='logo.png') }}"
+        onerror="this.href='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📄</text></svg>'">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            /* Premium Palette: Deep Spaces & Vibrant Accents */
+            --bg-deep: #0f111a;
+            --bg-surface: #1e293b;
+            --bg-glass: rgba(30, 41, 59, 0.7);
+            --bg-glass-strong: rgba(15, 23, 42, 0.85);
+
+            --primary: #6366f1;
+            /* Indigo */
+            --primary-glow: rgba(99, 102, 241, 0.4);
+            --accent: #8b5cf6;
+            /* Violet */
+            --secondary: #ec4899;
+            /* Pink/Rose */
+
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --border: rgba(255, 255, 255, 0.08);
+            --border-hover: rgba(99, 102, 241, 0.3);
+
+            --font-main: 'Outfit', sans-serif;
+            --font-mono: 'JetBrains Mono', monospace;
+
+            --radius-lg: 16px;
+            --radius-md: 12px;
+            --shadow-soft: 0 10px 40px -10px rgba(0, 0, 0, 0.5);
+            --shadow-glow: 0 0 20px rgba(99, 102, 241, 0.15);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            outline: none;
+        }
+
+        body {
+            font-family: var(--font-main);
+            background-color: var(--bg-deep);
+            color: var(--text-main);
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            background-image:
+                radial-gradient(circle at 15% 25%, rgba(99, 102, 241, 0.05) 0%, transparent 40%),
+                radial-gradient(circle at 85% 75%, rgba(139, 92, 246, 0.05) 0%, transparent 40%);
+        }
+
+        /* --- Animations --- */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* --- Header --- */
+        header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1.25rem 2.5rem;
+            background: var(--bg-glass-strong);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
+            z-index: 100;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            text-decoration: none;
+        }
+
+        .brand-logo {
+            width: 42px;
+            height: 42px;
+            border-radius: 10px;
+            object-fit: contain;
+            background: rgba(255, 255, 255, 0.05);
+            box-shadow: var(--shadow-glow);
+        }
+
+        .brand-text {
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #fff 0%, #cbd5e1 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -0.02em;
+        }
+
+        .brand-version {
+            font-size: 0.75rem;
+            background: rgba(99, 102, 241, 0.1);
+            color: var(--primary);
+            padding: 2px 8px;
+            border-radius: 99px;
+            border: 1px solid rgba(99, 102, 241, 0.2);
+            font-weight: 600;
+            margin-left: 0.5rem;
+        }
+
+        .nav-controls {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .search-bar {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border);
+            border-radius: 99px;
+            padding: 0.6rem 1.2rem;
+            display: flex;
+            align-items: center;
+            width: 350px;
+            transition: all 0.2s ease;
+        }
+
+        .search-bar:focus-within {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .search-bar i {
+            color: var(--text-muted);
+            margin-right: 0.5rem;
+        }
+
+        .search-bar input {
+            background: transparent;
+            border: none;
+            color: #fff;
+            width: 100%;
+            font-family: var(--font-main);
+            font-size: 0.95rem;
+        }
+
+        .search-bar input::placeholder {
+            color: rgba(148, 163, 184, 0.5);
+        }
+
+        .btn-icon {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border);
+            color: var(--text-main);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .btn-icon:hover {
+            background: var(--bg-surface);
+            border-color: var(--primary);
+            color: var(--primary);
+            transform: translateY(-1px);
+        }
+
+        /* --- Main Content --- */
+        main {
+            flex: 1;
+            padding: 2.5rem;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 2rem;
+        }
+
+        h2 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        h2::before {
+            content: '';
+            display: block;
+            width: 4px;
+            height: 24px;
+            background: var(--primary);
+            border-radius: 2px;
+            box-shadow: 0 0 10px var(--primary-glow);
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.5rem;
+            padding-bottom: 3rem;
+        }
+
+        /* --- Cards --- */
+        .card {
+            background: var(--bg-glass);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 1.5rem;
+            cursor: pointer;
+            text-decoration: none;
+            color: inherit;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            position: relative;
+            overflow: hidden;
+            animation: fadeIn 0.4s ease backwards;
+        }
+
+        /* Modern Glass Effect */
+        .card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.03) 0%, transparent 100%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-4px);
+            border-color: var(--border-hover);
+            box-shadow: var(--shadow-soft), var(--shadow-glow);
+            background: rgba(30, 41, 59, 0.9);
+        }
+
+        .card:hover::before {
+            opacity: 1;
+        }
+
+        .card-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            background: rgba(99, 102, 241, 0.1);
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            transition: transform 0.3s ease;
+        }
+
+        .card:hover .card-icon {
+            background: var(--primary);
+            color: #fff;
+            transform: scale(1.1);
+        }
+
+        .card-content {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+        }
+
+        .card-title {
+            font-weight: 600;
+            font-size: 1.1rem;
+            line-height: 1.4;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .card-meta {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Type Colors */
+        .type-md .card-icon {
+            color: #3b82f6;
+            background: rgba(59, 130, 246, 0.1);
+        }
+
+        .card:hover .type-md .card-icon {
+            background: #3b82f6;
+            color: white;
+        }
+
+        .type-docx .card-icon {
+            color: #2563eb;
+            background: rgba(37, 99, 235, 0.1);
+        }
+
+        .card:hover .type-docx .card-icon {
+            background: #2563eb;
+            color: white;
+        }
+
+        .type-txt .card-icon {
+            color: #94a3b8;
+            background: rgba(148, 163, 184, 0.1);
+        }
+
+        .card:hover .type-txt .card-icon {
+            background: #94a3b8;
+            color: white;
+        }
+
+        /* --- Footer/Status --- */
+        footer {
+            padding: 1rem 2.5rem;
+            border-top: 1px solid var(--border);
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            display: flex;
+            justify-content: flex-end;
+            background: var(--bg-deep);
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <a href="/" class="brand">
+            <img src="{{ url_for('static', filename='logo.png') }}" class="brand-logo" alt="OmniDoc">
+            <div>
+                <span class="brand-text">OmniDoc</span>
+                <span class="brand-version">v{{ version }}</span>
+            </div>
+        </a>
+
+        <div class="nav-controls">
+            <div class="search-bar">
+                <i class="fas fa-search"></i>
+                <input type="text" id="searchInput" placeholder="Search documents...">
+            </div>
+            <button class="btn-icon" title="Refresh" onclick="window.location.reload()">
+                <i class="fas fa-sync-alt"></i>
+            </button>
+        </div>
+    </header>
+
+    <main>
+        <div class="section-header">
+            <h2><i class="fas fa-folder-open"></i> Documents</h2>
+        </div>
+
+        {% if error %}
+        <div
+            style="background: rgba(239, 68, 68, 0.1); border: 1px solid #ef4444; color: #fca5a5; padding: 1rem; border-radius: 8px; margin-bottom: 2rem;">
+            <i class="fas fa-exclamation-circle"></i> {{ error }}
+        </div>
+        {% endif %}
+
+        <div class="grid" id="fileGrid">
+            {% for file in files %}
+            <a href="{{ url_for('view_file', filename=file.name) }}" class="card type-{{ file.type }}">
+                <div class="card-icon">
+                    {% if file.type == 'md' %}
+                    <i class="fab fa-markdown"></i>
+                    {% elif file.type == 'docx' %}
+                    <i class="fas fa-file-word"></i>
+                    {% else %}
+                    <i class="fas fa-file-alt"></i>
+                    {% endif %}
+                </div>
+                <div class="card-content">
+                    <div class="card-title" title="{{ file.name }}">{{ file.name }}</div>
+                    <div class="card-meta">
+                        <span>{{ file.size }}</span>
+                        <span>•</span>
+                        <span>{{ file.modified }}</span>
+                    </div>
+                </div>
+            </a>
+            {% else %}
+            <div style="grid-column: 1/-1; text-align: center; padding: 4rem; color: var(--text-muted);">
+                <i class="fas fa-folder-open" style="font-size: 3rem; margin-bottom: 1rem; opacity: 0.5;"></i>
+                <h3>No documents found</h3>
+                <p>Add .md or .docx files to your <code>doc_gallery</code> folder to see them here.</p>
+            </div>
+            {% endfor %}
+        </div>
+    </main>
+
+    <footer>
+        <div style="display: flex; flex-direction: column; align-items: flex-end; gap: 0.5rem;">
+            <span>OmniDoc &copy; 2024</span>
+            <div
+                style="font-size: 0.7rem; color: var(--text-muted); opacity: 0.5; text-align: right; background: rgba(0,0,0,0.2); padding: 5px; border-radius: 4px;">
+                Debug: Frozen={{ debug_info.frozen }} | Root={{ debug_info.project_root }} | Docs={{
+                debug_info.md_folder }}<br>
+                Templates={{ debug_info.template_folder }}
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        document.getElementById('searchInput').addEventListener('keyup', function (e) {
+            const term = e.target.value.toLowerCase();
+            const cards = document.querySelectorAll('.card');
+
+            cards.forEach(card => {
+                const title = card.querySelector('.card-title').textContent.toLowerCase();
+                if (title.includes(term)) {
+                    card.style.display = 'flex';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>

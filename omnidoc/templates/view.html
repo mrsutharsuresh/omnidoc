@@ -1,0 +1,1967 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ file.name }} - Documentation Hub</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css"
+        id="highlightTheme">
+    <!-- KaTeX for math rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <!-- Mermaid for diagrams -->
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <script>
+        mermaid.initialize({ startOnLoad: true, theme: 'default' });
+    </script>
+    <style>
+        /* EXACT color system from landing page */
+        :root {
+            --bg-deep: #0a0a0f;
+            --bg-glass: rgba(15, 15, 25, 0.6);
+            --bg-glass-strong: rgba(15, 15, 25, 0.85);
+            --text-main: #e2e8f0;
+            --text-dim: #94a3b8;
+            --text-muted: #64748b;
+            --border: rgba(99, 102, 241, 0.15);
+            --accent: #6366f1;
+            --accent-glow: #8b5cf6;
+
+            --font-main: 'Inter', system-ui, -apple-system, sans-serif;
+            --font-mono: 'JetBrains Mono', 'Consolas', monospace;
+
+            --radius-lg: 16px;
+            --radius-md: 12px;
+            --shadow-soft: 0 10px 40px -10px rgba(0, 0, 0, 0.5);
+            --shadow-glow: 0 0 20px rgba(99, 102, 241, 0.15);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: var(--font-main);
+            background-color: var(--bg-deep);
+            color: var(--text-main);
+            min-height: 100vh;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            background-image:
+                radial-gradient(circle at 15% 25%, rgba(99, 102, 241, 0.05) 0%, transparent 40%),
+                radial-gradient(circle at 85% 75%, rgba(139, 92, 246, 0.05) 0%, transparent 40%);
+        }
+
+        /* Top Navigation - Matching Landing Page */
+        .top-nav {
+            background: var(--bg-glass-strong);
+            border-bottom: 1px solid var(--border);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(20px);
+            padding: 1rem 2.5rem;
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1.5rem;
+        }
+
+        .nav-left {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .nav-right {
+            display: flex;
+            gap: 0.75rem;
+            align-items: center;
+            margin-left: auto;
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            color: var(--text-main);
+            text-decoration: none;
+            background: var(--bg-glass);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .back-link:hover {
+            background: var(--bg-glass-strong);
+            border-color: var(--accent);
+            transform: translateX(-2px);
+            box-shadow: var(--shadow-glow);
+        }
+
+        .back-link svg {
+            width: 18px;
+            height: 18px;
+        }
+
+        .file-meta-nav {
+            display: flex;
+            gap: 1rem;
+            font-size: 13px;
+            color: var(--text-dim);
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .meta-item svg {
+            width: 16px;
+            height: 16px;
+            opacity: 0.8;
+        }
+
+        .theme-toggle {
+            background: var(--bg-glass);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            padding: 0.5rem 0.75rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 14px;
+            color: var(--text-main);
+            transition: all 0.2s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .theme-toggle:hover {
+            background: var(--bg-glass-strong);
+            border-color: var(--accent);
+            box-shadow: var(--shadow-glow);
+        }
+
+        .theme-icon {
+            font-size: 18px;
+            width: 18px;
+            height: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .export-pdf-btn {
+            background: linear-gradient(135deg, #dc2626, #ef4444);
+            border: none;
+            border-radius: var(--radius-md);
+            padding: var(--space-2) var(--space-3);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: var(--space-2);
+            font-size: var(--font-size-sm);
+            font-weight: 600;
+            color: white;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 2px 8px rgba(220, 38, 38, 0.3);
+        }
+
+        .export-pdf-btn:hover {
+            background: linear-gradient(135deg, #b91c1c, #dc2626);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(220, 38, 38, 0.4);
+        }
+
+        .export-pdf-btn:active {
+            transform: translateY(0);
+            box-shadow: 0 2px 6px rgba(220, 38, 38, 0.3);
+        }
+
+        .export-pdf-btn .icon {
+            font-size: 18px;
+        }
+
+        /* Export Word Button */
+        .export-word-btn {
+            background: linear-gradient(135deg, #2563eb, #3b82f6);
+            border: none;
+            border-radius: var(--radius-md);
+            padding: var(--space-2) var(--space-3);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: var(--space-2);
+            font-size: var(--font-size-sm);
+            font-weight: 600;
+            color: white;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 2px 8px rgba(37, 99, 235, 0.3);
+        }
+
+        .export-word-btn:hover {
+            background: linear-gradient(135deg, #1d4ed8, #2563eb);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.4);
+        }
+
+        .export-word-btn:active {
+            transform: translateY(0);
+            box-shadow: 0 2px 6px rgba(37, 99, 235, 0.3);
+        }
+
+        .export-word-btn .icon {
+            font-size: 18px;
+        }
+
+        /* Export Dropdown Container */
+        .export-dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .export-main-btn {
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            border: none;
+            border-radius: var(--radius-md);
+            padding: var(--space-2) var(--space-3);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: var(--space-2);
+            font-size: var(--font-size-sm);
+            font-weight: 600;
+            color: white;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 2px 8px rgba(99, 102, 241, 0.3);
+        }
+
+        .export-main-btn:hover {
+            background: linear-gradient(135deg, #4f46e5, #7c3aed);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.4);
+        }
+
+        .export-main-btn .icon {
+            font-size: 18px;
+        }
+
+        .export-dropdown-menu {
+            position: absolute;
+            top: calc(100% + var(--space-2));
+            right: 0;
+            background: var(--color-surface);
+            border: 1px solid var(--color-border-default);
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-lg);
+            min-width: 180px;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .export-dropdown-menu.show {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .export-dropdown-item {
+            padding: var(--space-3);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: var(--space-2);
+            font-size: var(--font-size-sm);
+            font-weight: 500;
+            color: var(--color-text-primary);
+            transition: all 0.2s ease;
+            border-bottom: 1px solid var(--color-border-muted);
+        }
+
+        .export-dropdown-item:last-child {
+            border-bottom: none;
+        }
+
+        .export-dropdown-item:hover {
+            background: var(--color-surface-hover);
+        }
+
+        .export-dropdown-item .icon {
+            font-size: 18px;
+        }
+
+        .export-dropdown-item.pdf {
+            color: #dc2626;
+        }
+
+        .export-dropdown-item.word {
+            color: #2563eb;
+        }
+
+        /* TOC - Premium Design with Progressive Nesting */
+        .generated-toc {
+            border: 1px solid var(--color-border-default);
+            border-radius: var(--radius-lg);
+            background: var(--color-surface);
+            box-shadow: var(--shadow-md);
+            padding: var(--space-5);
+            margin: var(--space-5) auto;
+            max-width: min(1100px, 90vw);
+        }
+
+        .toc-title {
+            font-size: 22px;
+            font-weight: 800;
+            margin-bottom: var(--space-4);
+            padding-bottom: var(--space-3);
+            border-bottom: 2px solid var(--color-border-default);
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            letter-spacing: -0.5px;
+        }
+
+        .toc-list {
+            margin-top: var(--space-4);
+        }
+
+        /* Base list styles */
+        .toc-ol {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Progressive nesting - each level adds indentation and visual indicator */
+        .toc-ol.toc-depth-1 {
+            padding-left: 20px;
+            margin-top: 6px;
+            margin-bottom: 6px;
+            border-left: 2px solid rgba(99, 102, 241, 0.2);
+            margin-left: 10px;
+        }
+
+        .toc-ol.toc-depth-2 {
+            padding-left: 18px;
+            margin-top: 4px;
+            margin-bottom: 4px;
+            border-left: 2px solid rgba(99, 102, 241, 0.15);
+            margin-left: 8px;
+        }
+
+        .toc-ol.toc-depth-3 {
+            padding-left: 16px;
+            margin-top: 3px;
+            margin-bottom: 3px;
+            border-left: 1px solid rgba(99, 102, 241, 0.12);
+            margin-left: 6px;
+        }
+
+        .toc-ol.toc-depth-4,
+        .toc-ol.toc-depth-5 {
+            padding-left: 14px;
+            margin-top: 2px;
+            margin-bottom: 2px;
+            border-left: 1px solid rgba(99, 102, 241, 0.1);
+            margin-left: 4px;
+        }
+
+        [data-theme="dark"] .toc-ol.toc-depth-1 {
+            border-left-color: rgba(168, 85, 247, 0.25);
+        }
+
+        [data-theme="dark"] .toc-ol.toc-depth-2 {
+            border-left-color: rgba(168, 85, 247, 0.2);
+        }
+
+        [data-theme="dark"] .toc-ol.toc-depth-3,
+        [data-theme="dark"] .toc-ol.toc-depth-4,
+        [data-theme="dark"] .toc-ol.toc-depth-5 {
+            border-left-color: rgba(168, 85, 247, 0.15);
+        }
+
+        /* TOC Item - clean block layout */
+        .toc-item {
+            position: relative;
+            padding: 8px 0;
+            border-bottom: 1px solid transparent;
+            transition: all 0.2s ease;
+            line-height: 1.6;
+        }
+
+        .toc-item:hover {
+            background: var(--color-surface-hover);
+            border-bottom-color: var(--color-border-muted);
+            padding-left: 8px;
+            margin-left: -8px;
+            border-radius: var(--radius-sm);
+        }
+
+        /* Main section items - larger, bolder */
+        .toc-item.toc-section {
+            padding: 10px 0;
+            margin-top: 4px;
+        }
+
+        /* Number badge - inline-block for natural flow */
+        .toc-num {
+            display: inline-block;
+            min-width: 48px;
+            padding: 4px 10px;
+            margin-right: 10px;
+            border-radius: var(--radius-sm);
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.12), rgba(139, 92, 246, 0.12));
+            border: 1px solid rgba(99, 102, 241, 0.25);
+            color: var(--color-accent-primary);
+            font-weight: 700;
+            font-size: 12px;
+            text-align: center;
+            font-variant-numeric: tabular-nums;
+            vertical-align: baseline;
+            line-height: 1.4;
+        }
+
+        /* Main section numbers - larger and bolder */
+        .toc-item.toc-section>.toc-num {
+            font-weight: 800;
+            font-size: 13px;
+            min-width: 52px;
+            padding: 5px 12px;
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.15), rgba(139, 92, 246, 0.15));
+            border-width: 1.5px;
+        }
+
+        /* H3 level (2.1, 2.2, etc.) */
+        .toc-item.toc-l3>.toc-num {
+            font-size: 11px;
+            min-width: 46px;
+            padding: 3px 8px;
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(139, 92, 246, 0.1));
+        }
+
+        /* H4 level (2.1.1, 2.1.2, etc.) */
+        .toc-item.toc-l4>.toc-num {
+            font-size: 10px;
+            min-width: 44px;
+            padding: 2px 6px;
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.08), rgba(139, 92, 246, 0.08));
+            opacity: 0.9;
+        }
+
+        /* H5+ levels (deeper nesting) */
+        .toc-item.toc-l5>.toc-num,
+        .toc-item.toc-l6>.toc-num {
+            font-size: 9px;
+            min-width: 42px;
+            padding: 2px 5px;
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.06), rgba(139, 92, 246, 0.06));
+            opacity: 0.85;
+        }
+
+        [data-theme="dark"] .toc-num {
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.18), rgba(168, 85, 247, 0.18));
+            border-color: rgba(168, 85, 247, 0.35);
+            color: var(--color-accent-emphasis);
+        }
+
+        [data-theme="dark"] .toc-item.toc-section>.toc-num {
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.22), rgba(168, 85, 247, 0.22));
+        }
+
+        /* Main content wrapper - simple inline */
+        .toc-main {
+            display: inline;
+        }
+
+        /* Toggle button - inline for natural flow */
+        .toc-toggle {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            margin-right: 6px;
+            border: 1px solid var(--color-border-default);
+            background: var(--color-surface);
+            border-radius: var(--radius-sm);
+            text-align: center;
+            line-height: 18px;
+            cursor: pointer;
+            font-size: 10px;
+            color: var(--color-text-secondary);
+            transition: all 0.2s ease;
+            vertical-align: baseline;
+        }
+
+        .toc-toggle:hover {
+            background: var(--color-accent-primary);
+            border-color: var(--color-accent-primary);
+            color: white;
+            transform: scale(1.15);
+        }
+
+        .toc-toggle[aria-expanded="false"]::after {
+            content: '▸';
+        }
+
+        .toc-toggle[aria-expanded="true"]::after {
+            content: '▾';
+        }
+
+        /* Links - inline with progressive sizing */
+        .toc-link {
+            display: inline;
+            color: var(--color-text-primary);
+            text-decoration: none;
+            line-height: 1.6;
+            font-size: 15px;
+            font-weight: 500;
+            transition: color 0.2s ease;
+        }
+
+        .toc-link:hover {
+            color: var(--color-accent-primary);
+            text-decoration: underline;
+        }
+
+        /* Main section links - larger and bolder */
+        .toc-item.toc-section .toc-link {
+            font-weight: 700;
+            font-size: 16px;
+            letter-spacing: -0.2px;
+        }
+
+        /* H3 subsections (1.1, 1.2, 2.1, etc.) */
+        .toc-item.toc-l3 .toc-link {
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        /* H4 subsections (1.1.1, 1.1.2, etc.) */
+        .toc-item.toc-l4 .toc-link {
+            font-size: 13px;
+            font-weight: 500;
+        }
+
+        /* H5+ subsections (deeper nesting) */
+        .toc-item.toc-l5 .toc-link,
+        .toc-item.toc-l6 .toc-link {
+            font-size: 12px;
+            font-weight: 400;
+            color: var(--color-text-secondary);
+        }
+
+        /* Collapsed state - hide children of any collapsed item */
+        .toc-collapsible.collapsed>.toc-ol {
+            display: none;
+        }
+
+        /* Smooth expand/collapse animation */
+        .toc-ol {
+            transition: all 0.3s ease;
+        }
+
+        .smart-toggle {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: 2px solid #667eea;
+            border-radius: var(--radius-md);
+            padding: 8px 16px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            color: white;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
+        }
+
+        .smart-toggle:hover {
+            background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.5);
+            transform: translateY(-1px);
+        }
+
+        .smart-toggle.raw-mode {
+            background: #6b7280;
+            border-color: #4b5563;
+            box-shadow: 0 2px 8px rgba(107, 114, 128, 0.3);
+        }
+
+        .smart-toggle.raw-mode:hover {
+            background: #4b5563;
+            box-shadow: 0 4px 12px rgba(107, 114, 128, 0.5);
+        }
+
+        .theme-icon {
+            font-size: 16px;
+        }
+
+        /* Smart mode status badge */
+        .smart-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 10px;
+            border-radius: 999px;
+            font-size: 12px;
+            font-weight: 700;
+            margin-left: 10px;
+            vertical-align: middle;
+            user-select: none;
+        }
+
+        .smart-badge.smart-on {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #fff;
+        }
+
+        .smart-badge.smart-off {
+            background: #e5e7eb;
+            color: #374151;
+        }
+
+        [data-theme="dark"] .smart-badge.smart-off {
+            background: #374151;
+            color: #e5e7eb;
+        }
+
+        /* Go To Top Button (always visible) */
+        .go-top-fab {
+            position: fixed;
+            right: 20px;
+            bottom: 24px;
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 14px;
+            border-radius: 999px;
+            border: 1px solid var(--color-accent-primary);
+            background: var(--color-accent-primary);
+            color: #fff;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 8px 20px rgba(99, 102, 241, 0.35);
+            transition: all 0.25s ease;
+        }
+
+        .go-top-fab:hover {
+            background: var(--color-accent-emphasis);
+            border-color: var(--color-accent-emphasis);
+            box-shadow: 0 10px 24px rgba(79, 70, 229, 0.45);
+            transform: translateY(-1px);
+        }
+
+        /* Main Content */
+        .main-container {
+            width: 100%;
+            margin: 0 auto;
+            padding: var(--space-6) var(--space-6);
+            box-sizing: border-box;
+        }
+
+        /* Generated TOC styles - Duplicate section removed, using main TOC styles above */
+
+        /* Document Header - Modern Card Style */
+        .document-header {
+            margin-bottom: var(--space-6);
+            padding: var(--space-6);
+            background: var(--color-surface);
+            border: 1px solid var(--color-border-default);
+            border-radius: var(--radius-xl);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05), 0 20px 25px -5px rgba(99, 102, 241, 0.08);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .document-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--gradient-primary);
+        }
+
+        [data-theme="dark"] .document-header {
+            background: var(--color-surface);
+            border-color: var(--color-border-default);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3), 0 20px 25px -5px rgba(0, 0, 0, 0.4);
+        }
+
+        .document-title {
+            font-size: var(--font-size-4xl);
+            font-weight: 800;
+            line-height: var(--line-height-tight);
+            margin-bottom: var(--space-3);
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .document-meta {
+            display: flex;
+            gap: var(--space-4);
+            font-size: var(--font-size-sm);
+            color: var(--color-text-muted);
+            flex-wrap: wrap;
+        }
+
+        .document-meta .meta-item {
+            display: flex;
+            align-items: center;
+            gap: var(--space-2);
+        }
+
+        .document-meta .meta-item svg {
+            width: 16px;
+            height: 16px;
+        }
+
+        /* Markdown Content */
+        .markdown-content {
+            color: var(--color-text-secondary);
+            font-size: var(--font-size-md);
+            line-height: var(--line-height-relaxed);
+        }
+
+        .markdown-content h1,
+        .markdown-content h2,
+        .markdown-content h3,
+        .markdown-content h4,
+        .markdown-content h5,
+        .markdown-content h6 {
+            margin-top: 2em;
+            margin-bottom: 0.75em;
+            color: var(--color-text-primary);
+            line-height: var(--line-height-tight);
+            font-weight: 700;
+            scroll-margin-top: 80px;
+        }
+
+        .markdown-content h1:first-child,
+        .markdown-content h2:first-child,
+        .markdown-content h3:first-child {
+            margin-top: 0;
+        }
+
+        .markdown-content h1 {
+            font-size: 2rem;
+            padding-bottom: var(--space-3);
+            border-bottom: 2px solid var(--color-border-default);
+            color: var(--color-text-primary);
+        }
+
+        .markdown-content h2 {
+            font-size: 1.5rem;
+            padding-bottom: var(--space-2);
+            border-bottom: 1px solid var(--color-border-muted);
+            color: var(--color-text-primary);
+        }
+
+        .markdown-content h3 {
+            font-size: 1.25rem;
+        }
+
+        .markdown-content h4 {
+            font-size: 1.125rem;
+        }
+
+        .markdown-content h5 {
+            font-size: 1rem;
+            font-weight: 600;
+        }
+
+        .markdown-content h6 {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--color-text-secondary);
+        }
+
+        .markdown-content p {
+            margin-bottom: 1em;
+        }
+
+        .markdown-content ul,
+        .markdown-content ol {
+            margin-left: var(--space-5);
+            margin-bottom: 1em;
+        }
+
+        .markdown-content li {
+            margin-bottom: 0.5em;
+        }
+
+        .markdown-content li>p {
+            margin-bottom: 0.5em;
+        }
+
+        .markdown-content code {
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.08), rgba(118, 75, 162, 0.08));
+            padding: 3px 8px;
+            border-radius: var(--radius-sm);
+            font-family: var(--font-mono);
+            font-size: 0.875em;
+            color: var(--color-accent-primary);
+            border: 1px solid rgba(99, 102, 241, 0.2);
+            font-weight: 600;
+        }
+
+        .markdown-content pre {
+            background: #f8f9fa;
+            border: 1px solid #e2e8f0;
+            border-radius: var(--radius-lg);
+            padding: var(--space-5);
+            overflow-x: auto;
+            margin-bottom: 1.5em;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06), 0 0 0 1px rgba(99, 102, 241, 0.08) inset;
+            position: relative;
+        }
+
+        [data-theme="dark"] .markdown-content pre {
+            background: #1e1e1e;
+            border-color: #404040;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(99, 102, 241, 0.15) inset;
+        }
+
+        .markdown-content pre::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--gradient-primary);
+            border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+        }
+
+        .markdown-content pre code {
+            background: transparent;
+            padding: 0;
+            border: none;
+            font-size: 14px;
+            line-height: 1.5;
+            color: #1a1a1a !important;
+            display: block;
+            font-weight: 400;
+            letter-spacing: 0;
+            white-space: pre;
+            word-wrap: normal;
+            overflow-x: auto;
+            font-family: 'Cascadia Code', 'Consolas', 'Courier New', monospace;
+            tab-size: 8;
+            -moz-tab-size: 8;
+            font-variant-ligatures: none;
+            text-rendering: optimizeLegibility;
+        }
+
+        /* Ensure syntax highlighting doesn't override base text color for plain code blocks */
+        .markdown-content pre code.nohighlight,
+        .markdown-content pre code.plaintext {
+            color: #1a1a1a !important;
+        }
+
+        [data-theme="dark"] .markdown-content pre code {
+            color: #e8e8e8 !important;
+        }
+
+        [data-theme="dark"] .markdown-content pre code.nohighlight,
+        [data-theme="dark"] .markdown-content pre code.plaintext {
+            color: #e8e8e8 !important;
+        }
+
+        .markdown-content blockquote {
+            border-left: 4px solid #6366f1;
+            padding: var(--space-4);
+            margin: 1.5em 0;
+            background: rgba(99, 102, 241, 0.04);
+            border-radius: 0 var(--radius-md) var(--radius-md) 0;
+            color: var(--color-text-secondary);
+        }
+
+        [data-theme="dark"] .markdown-content blockquote {
+            background: rgba(99, 102, 241, 0.08);
+            border-left-color: #8b5cf6;
+        }
+
+        .markdown-content table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 1.5em;
+            border: 2px solid rgba(99, 102, 241, 0.2);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .markdown-content table th,
+        .markdown-content table td {
+            padding: 14px 18px;
+            text-align: left;
+            border-bottom: 1px solid var(--color-border-default);
+        }
+
+        .markdown-content table th {
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+            color: #ffffff;
+            font-weight: 700;
+            font-size: var(--font-size-sm);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .markdown-content table tbody tr:hover {
+            background: rgba(99, 102, 241, 0.04);
+        }
+
+        [data-theme="dark"] .markdown-content table tbody tr:hover {
+            background: rgba(99, 102, 241, 0.15);
+        }
+
+        .markdown-content table tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        .markdown-content a {
+            color: var(--color-text-link);
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+
+        .markdown-content a:hover {
+            color: var(--color-text-link-hover);
+            text-decoration: underline;
+        }
+
+        .markdown-content img {
+            max-width: 100%;
+            height: auto;
+            border-radius: var(--radius-md);
+            margin: 1.5em 0;
+            border: 1px solid var(--color-border-default);
+        }
+
+        .markdown-content hr {
+            border: none;
+            border-top: 1px solid var(--color-border-default);
+            margin: 2em 0;
+        }
+
+        .markdown-content strong {
+            font-weight: 600;
+            color: var(--color-text-primary);
+        }
+
+        /* Collapsible Sections */
+        .toggle-icon {
+            display: inline-block;
+            margin-right: var(--space-2);
+            font-size: 0.8em;
+            transition: transform 0.2s ease;
+            color: var(--color-accent-primary);
+            cursor: pointer;
+        }
+
+        .markdown-content h1,
+        .markdown-content h2 {
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .markdown-content h1:hover,
+        .markdown-content h2:hover {
+            color: var(--color-accent-primary);
+        }
+
+        .collapsible-content {
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .toc-clickable {
+            cursor: pointer;
+            color: var(--color-text-link);
+            transition: all 0.2s ease;
+            padding: 2px 0;
+        }
+
+        .toc-clickable:hover {
+            color: var(--color-accent-primary);
+            text-decoration: underline;
+            transform: translateX(4px);
+        }
+
+        /* Mermaid Diagrams */
+        .mermaid {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(238, 242, 255, 0.95));
+            border: 2px solid rgba(99, 102, 241, 0.2);
+            border-radius: var(--radius-lg);
+            padding: var(--space-5);
+            margin: var(--space-5) 0;
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.1);
+            text-align: center;
+        }
+
+        [data-theme="dark"] .mermaid {
+            background: linear-gradient(135deg, rgba(30, 41, 59, 0.9), rgba(30, 41, 59, 0.7));
+            border-color: rgba(129, 140, 248, 0.3);
+        }
+
+        /* Math (KaTeX) */
+        .katex-display {
+            margin: var(--space-5) 0;
+            padding: var(--space-4);
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.05), rgba(118, 75, 162, 0.05));
+            border-radius: var(--radius-lg);
+            border: 2px solid rgba(99, 102, 241, 0.15);
+            overflow-x: auto;
+        }
+
+        /* Task Lists */
+        .markdown-content .task-list-item {
+            list-style-type: none;
+            margin-left: -1.5em;
+        }
+
+        .markdown-content .task-list-item input[type="checkbox"] {
+            margin-right: var(--space-2);
+            accent-color: var(--color-accent-primary);
+            transform: scale(1.2);
+        }
+
+        /* Admonitions */
+        .markdown-content .admonition {
+            padding: var(--space-4);
+            margin: var(--space-4) 0;
+            border-left: 4px solid;
+            border-radius: var(--radius-md);
+        }
+
+        .markdown-content .admonition.note {
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.08), rgba(37, 99, 235, 0.08));
+            border-color: #3b82f6;
+        }
+
+        .markdown-content .admonition.warning {
+            background: linear-gradient(135deg, rgba(245, 158, 11, 0.08), rgba(217, 119, 6, 0.08));
+            border-color: #f59e0b;
+        }
+
+        .markdown-content .admonition.danger {
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.08), rgba(220, 38, 38, 0.08));
+            border-color: #ef4444;
+        }
+
+        .markdown-content .admonition.success {
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.08), rgba(5, 150, 105, 0.08));
+            border-color: #10b981;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-container {
+                min-height: 56px;
+                padding: 6px var(--space-3);
+                flex-wrap: nowrap;
+                /* keep single row */
+            }
+
+            .file-meta-nav {
+                display: none;
+            }
+
+            .main-container {
+                padding: var(--space-4) var(--space-3);
+            }
+
+            .document-title {
+                font-size: var(--font-size-3xl);
+            }
+
+            .markdown-content h1 {
+                font-size: 1.75rem;
+            }
+
+            .markdown-content h2 {
+                font-size: 1.375rem;
+            }
+
+            .markdown-content h3 {
+                font-size: 1.125rem;
+            }
+
+            .markdown-content table {
+                font-size: var(--font-size-sm);
+            }
+
+            .markdown-content table th,
+            .markdown-content table td {
+                padding: 8px 12px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Top Navigation -->
+    <nav class="top-nav">
+        <div class="nav-container">
+            <div class="nav-left">
+                <a href="/" class="back-link">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                        stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
+                    </svg>
+                    Back to Hub
+                </a>
+                <div class="file-meta-nav">
+                    <div class="meta-item">
+                        <svg viewBox="0 0 16 16" fill="currentColor">
+                            <path
+                                d="M5.5 7a.5.5 0 0 0 0 1h5a.5.5 0 0 0 0-1h-5zM5 9.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5zm0 2a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5z" />
+                            <path
+                                d="M9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V4.5L9.5 0zm0 1v2A1.5 1.5 0 0 0 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h5.5z" />
+                        </svg>
+                        {{ file.size }}
+                    </div>
+                    <div class="meta-item">
+                        <svg viewBox="0 0 16 16" fill="currentColor">
+                            <path
+                                d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5zM1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4H1z" />
+                        </svg>
+                        {{ file.modified }}
+                    </div>
+                </div>
+            </div>
+
+            <div class="nav-right">
+                {% if not file.preview_mode and not file.filename.endswith('.docx') %}
+                <button class="smart-toggle" onclick="toggleEditMode()" aria-label="Edit document"
+                    title="Edit document">
+                    <span>✏️</span>
+                    <span>Edit</span>
+                </button>
+                {% endif %}
+                <div class="export-dropdown">
+                    <button class="export-main-btn" onclick="toggleExportMenu()" aria-label="Export document"
+                        title="Export document to PDF or Word">
+                        <span class="icon">📥</span>
+                        <span>Export</span>
+                    </button>
+                    <div class="export-dropdown-menu" id="exportMenu">
+                        <div class="export-dropdown-item pdf" onclick="exportToPDF()">
+                            <span class="icon">📄</span>
+                            <span>PDF</span>
+                        </div>
+                        <div class="export-dropdown-item word" onclick="exportToWord()">
+                            <span class="icon">📘</span>
+                            <span>Word</span>
+                        </div>
+                    </div>
+                </div>
+                <button class="smart-toggle" id="smartToggleBtn" onclick="toggleSmartConversion()"
+                    aria-label="Toggle smart diagram conversion" title="Toggle between Smart Conversion and Raw ASCII">
+                    <span id="smartIcon">🎨</span>
+                    <span id="smartLabel">Smart</span>
+                </button>
+                <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme">
+                    <span class="theme-icon" id="themeIcon">🌙</span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="main-container">
+        <!-- Editor Container (hidden by default) -->
+        <div id="editorContainer"
+            style="display: none; position: relative; height: calc(100vh - 200px); margin-bottom: 20px;">
+            <div style="display: flex; gap: 10px; margin-bottom: 10px; justify-content: flex-end;">
+                <button onclick="saveDocument()"
+                    style="padding: 10px 20px; background: var(--color-accent-primary); color: white; border: none; border-radius: 6px; cursor: pointer;">💾
+                    Save</button>
+                <button onclick="toggleEditMode()"
+                    style="padding: 10px 20px; background: var(--color-border-default); color: var(--color-text-primary); border: none; border-radius: 6px; cursor: pointer;">❌
+                    Cancel</button>
+            </div>
+            <div id="monaco-editor"
+                style="height: calc(100% - 50px); border: 1px solid var(--color-border-default); border-radius: 8px;">
+            </div>
+        </div>
+
+        <div class="document-header">
+            <h1 class="document-title">{{ file.name }} <span id="smartBadge" class="smart-badge smart-on">🎨
+                    Smart</span></h1>
+            <div class="document-meta">
+                <div class="meta-item">
+                    <svg viewBox="0 0 16 16" fill="currentColor">
+                        <path
+                            d="M4 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H4zm0 1h8a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1z" />
+                    </svg>
+                    {{ file.filename }}
+                </div>
+            </div>
+        </div>
+
+        <div class="markdown-content" id="documentContent">
+            {{ file.content | safe }}
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.45.0/min/vs/loader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script>
+        const currentFilename = '{{ file.filename }}';
+        const currentFilePath = '{{ file.get("relative_path", file.filename) }}';
+        let monacoEditor = null;
+        hljs.highlightAll();
+
+        // Generate ID from text
+        function generateId(text) {
+            return text.toLowerCase()
+                .replace(/[^\w\s-]/g, '')
+                .replace(/\s+/g, '-')
+                .replace(/--+/g, '-')
+                .replace(/^-+|-+$/g, '')
+                .trim();
+        }
+
+        // Find header by text
+        function findHeaderByText(text, allHeaders) {
+            const searchText = text.toLowerCase().trim();
+            let header = document.getElementById(generateId(text));
+            if (header) return header;
+
+            const numberMatch = searchText.match(/^(\d+\.?\d*\.?\d*)/);
+            if (numberMatch) {
+                const sectionNum = numberMatch[1];
+                for (let h of allHeaders) {
+                    const headerText = h.getAttribute('data-section-name') || h.textContent.toLowerCase();
+                    if (headerText.startsWith(sectionNum)) {
+                        return h;
+                    }
+                }
+            }
+
+            for (let h of allHeaders) {
+                const headerText = h.getAttribute('data-section-name') || h.textContent.toLowerCase();
+                const cleanHeaderText = headerText.replace(/[▼▶]/g, '').trim();
+                if (cleanHeaderText.includes(searchText) || searchText.includes(cleanHeaderText)) {
+                    return h;
+                }
+            }
+
+            return null;
+        }
+
+        // Make cell clickable
+        function makeClickable(cell, targetHeader) {
+            cell.style.cursor = 'pointer';
+            cell.classList.add('toc-clickable');
+            cell.addEventListener('click', function () {
+                targetHeader.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                const icon = targetHeader.querySelector('.toggle-icon');
+                if (icon && icon.innerHTML === '▶') {
+                    targetHeader.click();
+                }
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const content = document.querySelector('.markdown-content');
+            if (!content) return;
+
+            // Setup header IDs
+            const allHeaders = content.querySelectorAll('h1, h2, h3, h4, h5, h6');
+            allHeaders.forEach(function (header) {
+                const text = header.textContent.replace(/[▼▶¶]/g, '').trim();
+                const fullId = generateId(text);
+                if (!header.id) {
+                    header.id = fullId;
+                }
+                header.setAttribute('data-section-name', text.toLowerCase());
+            });
+
+            // Make table cells clickable for TOC
+            const tables = content.querySelectorAll('table');
+            tables.forEach(function (table) {
+                const rows = table.querySelectorAll('tbody tr');
+                rows.forEach(function (row) {
+                    const cells = row.querySelectorAll('td');
+                    if (cells.length > 0) {
+                        cells.forEach(function (cell) {
+                            const cellText = cell.textContent.trim();
+                            if (!cellText || cellText.length < 2) return;
+                            let targetHeader = findHeaderByText(cellText, allHeaders);
+                            if (targetHeader) {
+                                makeClickable(cell, targetHeader);
+                            }
+                        });
+                    }
+                });
+            });
+
+            // Setup collapsible H2 headers
+            const h2Headers = content.querySelectorAll('h2');
+            h2Headers.forEach(function (h2) {
+                const icon = document.createElement('span');
+                icon.className = 'toggle-icon';
+                icon.innerHTML = '▼';
+                h2.insertBefore(icon, h2.firstChild);
+
+                let nextElement = h2.nextElementSibling;
+                const collapsibleContent = document.createElement('div');
+                collapsibleContent.className = 'collapsible-content';
+
+                while (nextElement && nextElement.tagName !== 'H2' && nextElement.tagName !== 'H1') {
+                    const temp = nextElement.nextElementSibling;
+                    collapsibleContent.appendChild(nextElement);
+                    nextElement = temp;
+                }
+
+                h2.parentNode.insertBefore(collapsibleContent, h2.nextSibling);
+
+                h2.addEventListener('click', function () {
+                    const isCollapsed = collapsibleContent.style.display === 'none';
+                    collapsibleContent.style.display = isCollapsed ? 'block' : 'none';
+                    icon.innerHTML = isCollapsed ? '▼' : '▶';
+                    icon.style.transform = isCollapsed ? 'rotate(0deg)' : 'rotate(-90deg)';
+                });
+            });
+
+            // Setup collapsible H1 headers
+            const h1Headers = content.querySelectorAll('h1');
+            h1Headers.forEach(function (h1) {
+                const icon = document.createElement('span');
+                icon.className = 'toggle-icon';
+                icon.innerHTML = '▼';
+                h1.insertBefore(icon, h1.firstChild);
+
+                let nextElement = h1.nextElementSibling;
+                const collapsibleContent = document.createElement('div');
+                collapsibleContent.className = 'collapsible-content';
+
+                while (nextElement && nextElement.tagName !== 'H1') {
+                    const temp = nextElement.nextElementSibling;
+                    collapsibleContent.appendChild(nextElement);
+                    nextElement = temp;
+                }
+
+                h1.parentNode.insertBefore(collapsibleContent, h1.nextSibling);
+
+                h1.addEventListener('click', function () {
+                    const isCollapsed = collapsibleContent.style.display === 'none';
+                    collapsibleContent.style.display = isCollapsed ? 'block' : 'none';
+                    icon.innerHTML = isCollapsed ? '▼' : '▶';
+                    icon.style.transform = isCollapsed ? 'rotate(0deg)' : 'rotate(-90deg)';
+                });
+            });
+
+            // Handle anchor links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const href = this.getAttribute('href');
+                    const targetId = href.substring(1);
+                    let target = document.getElementById(targetId);
+
+                    if (!target) {
+                        for (let header of allHeaders) {
+                            if (header.id === targetId || generateId(header.textContent) === targetId) {
+                                target = header;
+                                break;
+                            }
+                        }
+                    }
+
+                    if (target) {
+                        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                        const icon = target.querySelector('.toggle-icon');
+                        if (icon && icon.innerHTML === '▶') {
+                            setTimeout(() => target.click(), 300);
+                        }
+                    }
+                });
+            });
+
+            // TOC collapsible toggles - handle all items with toggle buttons
+            const tocCollapsible = document.querySelectorAll('.generated-toc .toc-collapsible');
+            tocCollapsible.forEach(function (item) {
+                const toggle = item.querySelector('.toc-toggle');
+                if (!toggle) return;
+                toggle.addEventListener('click', function (ev) {
+                    ev.preventDefault();
+                    ev.stopPropagation(); // Prevent bubbling to parent toggles
+                    const expanded = this.getAttribute('aria-expanded') === 'true';
+                    this.setAttribute('aria-expanded', expanded ? 'false' : 'true');
+                    item.classList.toggle('collapsed', expanded);
+                });
+            });
+        });
+
+        // Theme toggle functionality
+        function toggleTheme() {
+            const html = document.documentElement;
+            const currentTheme = html.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+
+            html.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+
+            updateThemeButton(newTheme);
+            updateHighlightTheme(newTheme);
+        }
+
+        function updateThemeButton(theme) {
+            const icon = document.getElementById('themeIcon');
+            if (theme === 'dark') {
+                icon.textContent = '☀️';
+            } else {
+                icon.textContent = '🌙';
+            }
+        }
+
+        function updateHighlightTheme(theme) {
+            const highlightTheme = document.getElementById('highlightTheme');
+            if (theme === 'dark') {
+                highlightTheme.href = 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/tokyo-night-dark.min.css';
+            } else {
+                highlightTheme.href = 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css';
+            }
+        }
+
+        // Smart conversion toggle functionality
+        function toggleSmartConversion() {
+            const currentState = localStorage.getItem('smartConversion') !== 'false';
+            const newState = !currentState;
+            localStorage.setItem('smartConversion', newState);
+
+            updateSmartButton(newState);
+
+            // Reload the page with smart parameter
+            const url = new URL(window.location);
+            url.searchParams.set('smart', newState);
+            window.location.href = url.toString();
+        }
+
+        function updateSmartButton(enabled) {
+            const icon = document.getElementById('smartIcon');
+            const label = document.getElementById('smartLabel');
+            const button = document.getElementById('smartToggleBtn');
+            const badge = document.getElementById('smartBadge');
+            const fab = document.getElementById('smartFab');
+            const fabIcon = document.getElementById('smartFabIcon');
+            const fabLabel = document.getElementById('smartFabLabel');
+
+            if (icon && label && button) {
+                if (enabled) {
+                    icon.textContent = '🎨';
+                    label.textContent = 'Smart';
+                    button.classList.remove('raw-mode');
+                } else {
+                    icon.textContent = '📄';
+                    label.textContent = 'Raw';
+                    button.classList.add('raw-mode');
+                }
+            }
+
+            if (badge) {
+                if (enabled) {
+                    badge.classList.remove('smart-off');
+                    badge.classList.add('smart-on');
+                    badge.textContent = '🎨 Smart';
+                } else {
+                    badge.classList.remove('smart-on');
+                    badge.classList.add('smart-off');
+                    badge.textContent = '📄 Raw';
+                }
+            }
+
+            // Floating smart FAB was removed; keep this block harmless.
+            if (fab && fabIcon && fabLabel) {
+                // No-op: element no longer present.
+            }
+        }
+
+        // Scroll to top behavior for the new bottom-right button
+        function scrollToTop() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // PDF Export functionality
+        function exportToPDF() {
+            closeExportMenu();
+            const button = document.querySelector('.export-main-btn');
+            const originalText = button.innerHTML;
+
+            // Show loading state
+            button.innerHTML = '<span class="icon">⏳</span><span>Generating...</span>';
+            button.disabled = true;
+
+            // Clone the document to modify it for PDF export
+            const clonedDoc = document.documentElement.cloneNode(true);
+
+            // Remove interactive UI elements from the cloned document
+            const elementsToRemove = [
+                '.export-main-btn',     // Export button
+                '.export-dropdown',     // Export dropdown
+                '.export-dropdown-menu', // Export menu
+                '.smart-toggle',        // Smart conversion button
+                '.theme-toggle',        // Theme toggle button
+                '#smartToggleBtn',      // Smart toggle by ID
+                '#smartBadge',          // Smart badge
+                '.back-to-top',         // Back to top floating button
+                '.scroll-to-top',       // Alternative scroll button class
+                '.go-top-fab'           // Go to top button
+            ];
+
+            elementsToRemove.forEach(selector => {
+                const elements = clonedDoc.querySelectorAll(selector);
+                elements.forEach(el => el.remove());
+            });
+
+            // Get the cleaned HTML
+            const documentHTML = clonedDoc.outerHTML;
+            const filename = '{{ file.filename }}'.replace(/\.(md|markdown|txt)$/i, '.pdf');
+
+            // Send to server for PDF generation
+            fetch('/export-pdf', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    html: documentHTML,
+                    filename: filename
+                })
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        // Check if this is a 404 with auto-install available
+                        return response.json().then(err => {
+                            if (err.auto_install_available) {
+                                button.innerHTML = originalText;
+                                button.disabled = false;
+                                showPDFInstallDialog();
+                                return null;
+                            }
+                            throw new Error(err.error || 'PDF generation failed');
+                        });
+                    }
+                    return response.blob();
+                })
+                .then(blob => {
+                    if (!blob) return; // Auto-install dialog shown
+
+                    // Create download link
+                    const url = window.URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = filename;
+                    document.body.appendChild(a);
+                    a.click();
+                    window.URL.revokeObjectURL(url);
+                    document.body.removeChild(a);
+
+                    // Reset button
+                    button.innerHTML = originalText;
+                    button.disabled = false;
+                })
+                .catch(error => {
+                    console.error('Error exporting PDF:', error);
+                    alert('Failed to generate PDF: ' + error.message);
+                    button.innerHTML = originalText;
+                    button.disabled = false;
+                });
+        }
+
+        // Word Export functionality
+        function exportToWord() {
+            closeExportMenu();
+            const button = document.querySelector('.export-main-btn');
+            const originalText = button.innerHTML;
+
+            // Show loading state
+            button.innerHTML = '<span class="icon">⏳</span><span>Generating...</span>';
+            button.disabled = true;
+
+            // Clone the document to modify it for Word export
+            const clonedDoc = document.documentElement.cloneNode(true);
+
+            // Remove interactive UI elements from the cloned document
+            const elementsToRemove = [
+                '.export-main-btn',     // Export button
+                '.export-dropdown',     // Export dropdown
+                '.export-dropdown-menu', // Export menu
+                '.smart-toggle',        // Smart conversion button
+                '.theme-toggle',        // Theme toggle button
+                '#smartToggleBtn',      // Smart toggle by ID
+                '#smartBadge',          // Smart badge
+                '.back-to-top',         // Back to top floating button
+                '.scroll-to-top',       // Alternative scroll button class
+                '.go-top-fab'           // Go to top button
+            ];
+
+            elementsToRemove.forEach(selector => {
+                const elements = clonedDoc.querySelectorAll(selector);
+                elements.forEach(el => el.remove());
+            });
+
+            // Get the cleaned HTML
+            const documentHTML = clonedDoc.outerHTML;
+            const filename = '{{ file.filename }}'.replace(/\.(md|markdown|txt)$/i, '.docx');
+
+            // Send to server for Word generation
+            fetch('/export-word', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    html: documentHTML,
+                    filename: filename
+                })
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        return response.json().then(err => {
+                            throw new Error(err.error || 'Word generation failed');
+                        }).catch(() => {
+                            throw new Error('Word generation failed');
+                        });
+                    }
+                    return response.blob();
+                })
+                .then(blob => {
+                    // Create download link
+                    const url = window.URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = filename;
+                    document.body.appendChild(a);
+                    a.click();
+                    window.URL.revokeObjectURL(url);
+                    document.body.removeChild(a);
+
+                    // Reset button
+                    button.innerHTML = originalText;
+                    button.disabled = false;
+                })
+                .catch(error => {
+                    console.error('Error exporting Word:', error);
+                    alert('Failed to generate Word document: ' + error.message);
+                    button.innerHTML = originalText;
+                    button.disabled = false;
+                });
+        }
+
+        // Toggle export dropdown menu
+        function toggleExportMenu() {
+            const menu = document.getElementById('exportMenu');
+            menu.classList.toggle('show');
+        }
+
+        // Close export menu
+        function closeExportMenu() {
+            const menu = document.getElementById('exportMenu');
+            menu.classList.remove('show');
+        }
+
+        // Close export menu when clicking outside
+        document.addEventListener('click', function (event) {
+            const dropdown = document.querySelector('.export-dropdown');
+            if (dropdown && !dropdown.contains(event.target)) {
+                closeExportMenu();
+            }
+        });
+
+        // Load saved theme and smart conversion state
+        (function () {
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            document.documentElement.setAttribute('data-theme', savedTheme);
+            updateThemeButton(savedTheme);
+            updateHighlightTheme(savedTheme);
+
+            // Sync smart conversion state with URL parameter
+            const urlParams = new URLSearchParams(window.location.search);
+            const urlSmart = urlParams.get('smart');
+
+            // If URL has smart parameter, use it and update localStorage
+            if (urlSmart !== null) {
+                const smartEnabled = urlSmart !== 'false';
+                localStorage.setItem('smartConversion', smartEnabled);
+                updateSmartButton(smartEnabled);
+            } else {
+                // Otherwise use localStorage value and update URL
+                const smartEnabled = localStorage.getItem('smartConversion') !== 'false';
+                updateSmartButton(smartEnabled);
+
+                // Add smart parameter to URL if not present
+                if (window.location.pathname.includes('/file/')) {
+                    const url = new URL(window.location);
+                    url.searchParams.set('smart', smartEnabled);
+                    window.history.replaceState({}, '', url.toString());
+                }
+            }
+        })();
+
+        // Edit Mode Functions
+        function toggleEditMode() {
+            const editorContainer = document.getElementById('editorContainer');
+            const documentContent = document.getElementById('documentContent');
+            const editButton = document.querySelector('button[onclick="toggleEditMode()"]');
+
+            if (!editorContainer || !documentContent) {
+                console.error('Editor containers not found');
+                return;
+            }
+
+            if (editorContainer.style.display === 'none' || editorContainer.style.display === '') {
+                // Switch to edit mode
+                loadDocumentSource();
+                editorContainer.style.display = 'block';
+                documentContent.style.display = 'none';
+                if (editButton) {
+                    editButton.innerHTML = '<span>❌</span><span>Cancel</span>';
+                }
+            } else {
+                // Switch to view mode
+                editorContainer.style.display = 'none';
+                documentContent.style.display = 'block';
+                if (editButton) {
+                    editButton.innerHTML = '<span>✏️</span><span>Edit</span>';
+                }
+            }
+        }
+
+        function loadDocumentSource() {
+            if (monacoEditor) {
+                // Editor already initialized
+                return;
+            }
+
+            // Fetch source content
+            fetch(`/api/get-source/${encodeURIComponent(currentFilePath)}`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Failed to load source');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    // Initialize Monaco Editor
+                    require.config({ paths: { 'vs': 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.45.0/min/vs' } });
+                    require(['vs/editor/editor.main'], function () {
+                        monacoEditor = monaco.editor.create(document.getElementById('monaco-editor'), {
+                            value: data.content,
+                            language: 'markdown',
+                            theme: document.documentElement.getAttribute('data-theme') === 'dark' ? 'vs-dark' : 'vs',
+                            automaticLayout: true,
+                            wordWrap: 'on',
+                            minimap: { enabled: false },
+                            scrollBeyondLastLine: false,
+                            fontSize: 14,
+                            lineNumbers: 'on',
+                            renderWhitespace: 'selection'
+                        });
+                    });
+                })
+                .catch(error => {
+                    console.error('Error loading source:', error);
+                    alert('Failed to load document source: ' + error.message);
+                    toggleEditMode(); // Switch back to view mode
+                });
+        }
+
+        function saveDocument() {
+            if (!monacoEditor) {
+                alert('Editor not initialized');
+                return;
+            }
+
+            const button = event.target;
+            const originalText = button.innerHTML;
+            button.innerHTML = '⏳ Saving...';
+            button.disabled = true;
+
+            const content = monacoEditor.getValue();
+
+            fetch('/api/save-document', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    filename: currentFilePath,
+                    content: content
+                })
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        return response.json().then(err => {
+                            throw new Error(err.error || 'Save failed');
+                        });
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    alert('Document saved successfully! Reloading...');
+                    // Reload page to show updated content
+                    window.location.reload();
+                })
+                .catch(error => {
+                    console.error('Error saving document:', error);
+                    alert('Failed to save document: ' + error.message);
+                    button.innerHTML = originalText;
+                    button.disabled = false;
+                });
+        }
+
+        // PDF Install Dialog Functions
+        function showPDFInstallDialog() {
+            const dialog = document.createElement('div');
+            dialog.id = 'pdfInstallDialog';
+            dialog.style.cssText = `
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background: rgba(0, 0, 0, 0.5);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                z-index: 10000;
+            `;
+
+            dialog.innerHTML = `
+                <div style="background: var(--color-surface); padding: 30px; border-radius: 12px; max-width: 500px; box-shadow: 0 8px 32px rgba(0,0,0,0.3);">
+                    <h2 style="margin-top: 0; color: var(--color-text-primary);">PDF Export Not Available</h2>
+                    <p style="color: var(--color-text-secondary); line-height: 1.6;">
+                        The PDF export feature requires wkhtmltopdf to be installed. 
+                        Would you like to install it automatically?
+                    </p>
+                    <p style="color: var(--color-text-secondary); font-size: 0.9em; line-height: 1.6;">
+                        This will download and install a portable version (no admin rights required).
+                    </p>
+                    <div style="display: flex; gap: 10px; margin-top: 20px; justify-content: flex-end;">
+                        <button onclick="closePDFInstallDialog()" style="padding: 10px 20px; background: var(--color-border-default); color: var(--color-text-primary); border: none; border-radius: 6px; cursor: pointer;">
+                            Cancel
+                        </button>
+                        <button onclick="installWkhtmltopdf()" style="padding: 10px 20px; background: var(--color-accent-primary); color: white; border: none; border-radius: 6px; cursor: pointer;">
+                            Install Now
+                        </button>
+                    </div>
+                </div>
+            `;
+
+            document.body.appendChild(dialog);
+        }
+
+        function closePDFInstallDialog() {
+            const dialog = document.getElementById('pdfInstallDialog');
+            if (dialog) {
+                dialog.remove();
+            }
+        }
+
+        function installWkhtmltopdf() {
+            const dialog = document.getElementById('pdfInstallDialog');
+            const content = dialog.querySelector('div > div');
+            content.innerHTML = `
+                <h2 style="margin-top: 0; color: var(--color-text-primary);">Installing wkhtmltopdf...</h2>
+                <p style="color: var(--color-text-secondary); line-height: 1.6;">
+                    Please wait while we download and install wkhtmltopdf. This may take a few minutes.
+                </p>
+                <div style="text-align: center; padding: 20px;">
+                    <div style="display: inline-block; width: 40px; height: 40px; border: 4px solid var(--color-border-default); border-top-color: var(--color-accent-primary); border-radius: 50%; animation: spin 1s linear infinite;"></div>
+                </div>
+                <style>
+                    @keyframes spin {
+                        0% { transform: rotate(0deg); }
+                        100% { transform: rotate(360deg); }
+                    }
+                </style>
+            `;
+
+            fetch('/api/install-wkhtmltopdf', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        content.innerHTML = `
+                        <h2 style="margin-top: 0; color: var(--color-text-primary);">✅ Installation Complete!</h2>
+                        <p style="color: var(--color-text-secondary); line-height: 1.6;">
+                            wkhtmltopdf has been installed successfully. You can now export documents to PDF.
+                        </p>
+                        <div style="display: flex; gap: 10px; margin-top: 20px; justify-content: flex-end;">
+                            <button onclick="closePDFInstallDialog()" style="padding: 10px 20px; background: var(--color-accent-primary); color: white; border: none; border-radius: 6px; cursor: pointer;">
+                                Close
+                            </button>
+                        </div>
+                    `;
+                    } else {
+                        throw new Error(data.error || 'Installation failed');
+                    }
+                })
+                .catch(error => {
+                    console.error('Installation error:', error);
+                    content.innerHTML = `
+                    <h2 style="margin-top: 0; color: var(--color-text-primary);">❌ Installation Failed</h2>
+                    <p style="color: var(--color-text-secondary); line-height: 1.6;">
+                        ${error.message}
+                    </p>
+                    <p style="color: var(--color-text-secondary); font-size: 0.9em; line-height: 1.6;">
+                        You may need to manually install wkhtmltopdf from 
+                        <a href="https://wkhtmltopdf.org/downloads.html" target="_blank" style="color: var(--color-accent-primary);">wkhtmltopdf.org</a>
+                    </p>
+                    <div style="display: flex; gap: 10px; margin-top: 20px; justify-content: flex-end;">
+                        <button onclick="closePDFInstallDialog()" style="padding: 10px 20px; background: var(--color-border-default); color: var(--color-text-primary); border: none; border-radius: 6px; cursor: pointer;">
+                            Close
+                        </button>
+                    </div>
+                `;
+                });
+        }
+    </script>
+
+    <!-- Always-visible Go To Top button -->
+    <button id="goTopFab" class="go-top-fab" onclick="scrollToTop()" aria-label="Go to top" title="Go to top">
+        <span class="go-top-icon">⬆️</span>
+        <span class="go-top-label">Top</span>
+    </button>
+</body>
+
+</html>

@@ -1,0 +1,262 @@
+# Makefile equivalent for Windows PowerShell
+# Build and release automation for OmniDoc
+
+param(
+    [Parameter(Position=0)]
+    [string]$Target = "help"
+)
+
+$ErrorActionPreference = "Stop"
+
+# Configuration
+$ProjectRoot = $PSScriptRoot
+$Version = (Get-Content "$ProjectRoot\VERSION").Trim()
+$Timestamp = Get-Date -Format "yyyyMMdd-HHmmss"
+$BuildVenv = "$ProjectRoot\build\venv"
+$Python = "$BuildVenv\Scripts\python.exe"
+
+function Show-Help {
+    Write-Host ""
+    Write-Host "========================================" -ForegroundColor Cyan
+    Write-Host "  OmniDoc v$Version - Build System  " -ForegroundColor Cyan
+    Write-Host "========================================" -ForegroundColor Cyan
+    Write-Host ""
+    Write-Host "Python Environment:" -ForegroundColor Yellow
+    if (Test-Path $Python) {
+        $PythonVer = & $Python --version
+        Write-Host "   Build Venv:     build\venv\" -ForegroundColor Gray
+        Write-Host "   Python:         $PythonVer" -ForegroundColor Gray
+    } else {
+        Write-Host "   Build Venv:     Not created (run 'setup' first)" -ForegroundColor Yellow
+    }
+    Write-Host ""
+    Write-Host "Available Targets:" -ForegroundColor Yellow
+    Write-Host "  make setup       - Setup build environment" -ForegroundColor Gray
+    Write-Host "  make build       - Build executable binary" -ForegroundColor Gray
+    Write-Host "  make release     - Create versioned release" -ForegroundColor Gray
+    Write-Host "  make start       - Start latest release" -ForegroundColor Gray
+    Write-Host "  make stop        - Stop running server" -ForegroundColor Gray
+    Write-Host "  make clean       - Clean build outputs" -ForegroundColor Gray
+    Write-Host "  make clean-all   - Clean everything" -ForegroundColor Gray
+    Write-Host "  make test        - Run tests" -ForegroundColor Gray
+    Write-Host "  make run         - Run from source (dev)" -ForegroundColor Gray
+    Write-Host "  make help        - Show this help" -ForegroundColor Gray
+    Write-Host ""
+    Write-Host "Quick Start:" -ForegroundColor Yellow
+    Write-Host "   1. .\make.ps1 setup" -ForegroundColor Gray
+    Write-Host "   2. .\make.ps1 release" -ForegroundColor Gray
+    Write-Host "   3. .\make.ps1 start" -ForegroundColor Gray
+    Write-Host ""
+}
+
+function Invoke-Setup {
+    Write-Host "Setting up build environment..." -ForegroundColor Yellow
+    Write-Host ""
+    
+    if (-not (Test-Path $BuildVenv)) {
+        Write-Host "Creating build venv at build\venv..." -ForegroundColor Gray
+        python -m venv $BuildVenv
+        Write-Host "Venv created" -ForegroundColor Green
+    } else {
+        Write-Host "Build venv already exists" -ForegroundColor Yellow
+    }
+    
+    Write-Host "Installing dependencies..." -ForegroundColor Gray
+    & "$BuildVenv\Scripts\pip.exe" install --upgrade pip setuptools wheel --quiet
+    & "$BuildVenv\Scripts\pip.exe" install -r build\build-requirements.txt --quiet
+    & "$BuildVenv\Scripts\pip.exe" install -r requirements.txt --quiet
+    
+    Write-Host "Build environment ready" -ForegroundColor Green
+    Write-Host ""
+    $PythonVer = & $Python --version
+    Write-Host "Python version: $PythonVer" -ForegroundColor Cyan
+    Write-Host ""
+}
+
+function Invoke-Build {
+    Write-Host "Building executable..." -ForegroundColor Yellow
+    Write-Host ""
+    
+    if (-not (Test-Path $Python)) {
+        Write-Host "ERROR: Build venv not found. Run '.\make.ps1 setup' first" -ForegroundColor Red
+        exit 1
+    }
+    
+    # Force reinstall dependencies to ensure latest versions
+    Write-Host "Refreshing dependencies..." -ForegroundColor Gray
+    & "$BuildVenv\Scripts\pip.exe" install -r requirements.txt --upgrade --quiet
+    
+    # Run PyInstaller build
+    & "$ProjectRoot\build\build.ps1"
+    
+    # Post-build: Seed doc_gallery with sample documents
+    Write-Host "Seeding doc_gallery with sample documents..." -ForegroundColor Gray
+    $DocGallery = "$ProjectRoot\build\output\doc_gallery"
+    if (-not (Test-Path $DocGallery)) {
+        New-Item -ItemType Directory -Path $DocGallery -Force | Out-Null
+    }
+    Copy-Item "$ProjectRoot\README.md" "$DocGallery\Welcome.md" -Force
+    Copy-Item "$ProjectRoot\doc\USER_GUIDE.md" "$DocGallery\UserGuide.md" -Force
+    Write-Host "Sample documents added: Welcome.md, UserGuide.md" -ForegroundColor Green
+}
+
+function Invoke-Release {
+    Write-Host ""
+    Write-Host "========================================" -ForegroundColor Cyan
+    Write-Host "  Creating Release v$Version" -ForegroundColor Cyan
+    Write-Host "========================================" -ForegroundColor Cyan
+    Write-Host ""
+    
+    # Clean and build
+    Invoke-Clean
+    Invoke-Build
+    
+    # Create timestamped release directory
+    $ArchiveDir = "$ProjectRoot\dist\archive\OmniDoc_v$Version-$Timestamp"
+    Write-Host "Creating timestamped release..." -ForegroundColor Yellow
+    New-Item -ItemType Directory -Path $ArchiveDir -Force | Out-Null
+    
+    # Copy executable from build/output
+    $ExePath = "$ProjectRoot\build\output\OmniDoc_v$Version.exe"
+    if (Test-Path $ExePath) {
+        Copy-Item $ExePath $ArchiveDir\
+    } else {
+        Write-Host "ERROR: Executable not found at $ExePath" -ForegroundColor Red
+        exit 1
+    }
+    
+    # Copy documentation
+    Copy-Item "$ProjectRoot\VERSION" $ArchiveDir\
+    Copy-Item "$ProjectRoot\README.md" $ArchiveDir\
+    Copy-Item "$ProjectRoot\RELEASE_NOTES_v$Version.md" $ArchiveDir\ -ErrorAction SilentlyContinue
+    Copy-Item -Recurse "$ProjectRoot\doc" $ArchiveDir\
+    
+    # Create release notes
+    $PythonVer = & $Python --version
+    $Platform = if([Environment]::Is64BitOperatingSystem){'x64'}else{'x86'}
+    $ReleaseDate = Get-Date -Format 'yyyy-MM-dd HH:mm:ss'
+    
+    "# OmniDoc v$Version`n" | Out-File "$ArchiveDir\RELEASE.md" -Encoding UTF8
+    "`nRelease Date: $ReleaseDate" | Add-Content "$ArchiveDir\RELEASE.md"
+    "Platform: Windows-$Platform" | Add-Content "$ArchiveDir\RELEASE.md"
+    "Python: Built with $PythonVer`n" | Add-Content "$ArchiveDir\RELEASE.md"
+    "`n## Quick Start`n" | Add-Content "$ArchiveDir\RELEASE.md"
+    ".\OmniDoc_v$Version.exe`n" | Add-Content "$ArchiveDir\RELEASE.md"
+    "Then open http://localhost:8000`n" | Add-Content "$ArchiveDir\RELEASE.md"
+    
+    # Create checksums
+    $Hash = Get-FileHash "$ArchiveDir\OmniDoc_v$Version.exe" -Algorithm SHA256
+    "$($Hash.Algorithm): $($Hash.Hash)" | Out-File "$ArchiveDir\checksums.txt" -Encoding UTF8
+    
+    Write-Host "Release created: $ArchiveDir" -ForegroundColor Green
+    Write-Host ""
+    
+    # Update latest junction (Windows symlink equivalent)
+    $LatestLink = "$ProjectRoot\dist\latest"
+    if (Test-Path $LatestLink) {
+        Remove-Item $LatestLink -Force
+    }
+    
+    cmd /c mklink /J "$LatestLink" "$ArchiveDir" 2>&1 | Out-Null
+    Write-Host "Junction updated: dist\latest" -ForegroundColor Green
+    Write-Host ""
+    
+    # Show release info
+    Write-Host "========================================" -ForegroundColor Green
+    Write-Host "  Release Complete!" -ForegroundColor Green
+    Write-Host "========================================" -ForegroundColor Green
+    Write-Host ""
+    Write-Host "Locations:" -ForegroundColor Yellow
+    Write-Host "   Latest:  dist\latest\OmniDoc_v$Version.exe" -ForegroundColor Cyan
+    Write-Host "   Release: $ArchiveDir" -ForegroundColor Cyan
+    Write-Host ""
+    Write-Host "Release Contents:" -ForegroundColor Yellow
+    Get-ChildItem $ArchiveDir | Format-Table Name, Length -AutoSize
+    Write-Host ""
+    Write-Host "Recent Releases:" -ForegroundColor Yellow
+    Get-ChildItem "$ProjectRoot\dist\archive" -Directory -ErrorAction SilentlyContinue | Sort-Object LastWriteTime -Descending | Select-Object -First 5 | Format-Table Name -AutoSize
+    Write-Host ""
+    Write-Host "Next Steps:" -ForegroundColor Yellow
+    Write-Host "   1. Start: .\make.ps1 start" -ForegroundColor Gray
+    Write-Host "   2. Stop:  .\make.ps1 stop" -ForegroundColor Gray
+    Write-Host ""
+}
+
+function Invoke-Start {
+    Write-Host "Starting latest release..." -ForegroundColor Yellow
+    Write-Host ""
+    & "$ProjectRoot\scripts\start-release.ps1"
+}
+
+function Invoke-Stop {
+    Write-Host "Stopping server..." -ForegroundColor Yellow
+    Write-Host ""
+    & "$ProjectRoot\scripts\stop-server.ps1"
+}
+
+function Invoke-Clean {
+    Write-Host "Cleaning build artifacts..." -ForegroundColor Yellow
+    Remove-Item -Recurse -Force "$ProjectRoot\build\output" -ErrorAction SilentlyContinue
+    Remove-Item -Recurse -Force "$ProjectRoot\build\pyinstaller" -ErrorAction SilentlyContinue
+    Remove-Item -Recurse -Force "$ProjectRoot\dist\OmniDoc_v$Version.exe" -ErrorAction SilentlyContinue
+    Remove-Item "$ProjectRoot\*.spec" -ErrorAction SilentlyContinue
+    Get-ChildItem -Path $ProjectRoot -Filter "__pycache__" -Recurse -Directory | Remove-Item -Recurse -Force -ErrorAction SilentlyContinue
+    Write-Host "Cleaned (build\venv preserved)" -ForegroundColor Green
+    Write-Host ""
+}
+
+function Invoke-CleanAll {
+    Write-Host "Deep cleaning..." -ForegroundColor Yellow
+    Invoke-Clean
+    Remove-Item -Recurse -Force $BuildVenv -ErrorAction SilentlyContinue
+    Write-Host "All cleaned - run '.\make.ps1 setup' to recreate venv" -ForegroundColor Green
+    Write-Host ""
+}
+
+function Invoke-Test {
+    Write-Host "Running tests..." -ForegroundColor Yellow
+    Write-Host ""
+    
+    if (Test-Path $Python) {
+        if (Test-Path "$ProjectRoot\tests") {
+            & $Python -m pytest tests\ -v
+        } else {
+            Write-Host "No tests directory found" -ForegroundColor Yellow
+        }
+    } else {
+        Write-Host "ERROR: Build venv not found. Run '.\make.ps1 setup' first" -ForegroundColor Red
+        exit 1
+    }
+}
+
+function Invoke-Run {
+    Write-Host "Starting development server..." -ForegroundColor Yellow
+    Write-Host ""
+    
+    if (Test-Path $Python) {
+        & $Python run.py
+    } else {
+        Write-Host "ERROR: Build venv not found. Run '.\make.ps1 setup' first" -ForegroundColor Red
+        exit 1
+    }
+}
+
+# Execute target
+switch ($Target.ToLower()) {
+    "help" { Show-Help }
+    "setup" { Invoke-Setup }
+    "build" { Invoke-Build }
+    "release" { Invoke-Release }
+    "start" { Invoke-Start }
+    "stop" { Invoke-Stop }
+    "clean" { Invoke-Clean }
+    "clean-all" { Invoke-CleanAll }
+    "test" { Invoke-Test }
+    "run" { Invoke-Run }
+    default {
+        Write-Host "ERROR: Unknown target '$Target'" -ForegroundColor Red
+        Write-Host ""
+        Show-Help
+        exit 1
+    }
+}
