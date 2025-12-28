@@ -16,7 +16,7 @@ pyinstaller OmniDoc.spec
 
 ### Option 2: Direct Build
 ```bash
-pyinstaller --onefile --name OmniDoc --add-data "doc_viewer/templates;doc_viewer/templates" --add-data "doc_gallery;doc_gallery" --add-data "doc;doc" --hidden-import flask --hidden-import markdown run.py
+pyinstaller --onefile --name OmniDoc --add-data "doc_viewer/templates;doc_viewer/templates" --add-data "examples;examples" --add-data "docs;docs" --hidden-import flask --hidden-import markdown run.py
 ```
 
 ## Output
@@ -31,7 +31,7 @@ Create a distribution folder with:
 ```
 OmniDoc-v1.0.0/
 ├── OmniDoc.exe          # Main executable
-├── doc_gallery/            # Sample markdown files
+├── workspace/              # Sample markdown files
 │   └── (your .md files)
 ├── README.md               # Documentation
 └── LICENSE.txt             # License file
@@ -41,7 +41,7 @@ OmniDoc-v1.0.0/
 
 ### End Users
 1. Extract the OmniDoc-v1.0.0.zip
-2. Add your .md files to the `doc_gallery/` folder
+2. Add your .md files to the `workspace/` folder
 3. Run `OmniDoc.exe`
 4. Browser opens at http://localhost:8000
 
@@ -64,7 +64,7 @@ OmniDoc.exe --debug
 
 1. Build the executable
 2. Copy it to a clean directory
-3. Create a `doc_gallery` folder with sample .md files
+3. Create a `workspace` folder (copy contents from `examples/`)
 4. Run the executable
 5. Verify all features work correctly
 

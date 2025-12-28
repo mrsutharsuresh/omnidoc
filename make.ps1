@@ -2,7 +2,7 @@
 # Build and release automation for OmniDoc
 
 param(
-    [Parameter(Position=0)]
+    [Parameter(Position = 0)]
     [string]$Target = "help"
 )
 
@@ -26,7 +26,8 @@ function Show-Help {
         $PythonVer = & $Python --version
         Write-Host "   Build Venv:     build\venv\" -ForegroundColor Gray
         Write-Host "   Python:         $PythonVer" -ForegroundColor Gray
-    } else {
+    }
+    else {
         Write-Host "   Build Venv:     Not created (run 'setup' first)" -ForegroundColor Yellow
     }
     Write-Host ""
@@ -57,7 +58,8 @@ function Invoke-Setup {
         Write-Host "Creating build venv at build\venv..." -ForegroundColor Gray
         python -m venv $BuildVenv
         Write-Host "Venv created" -ForegroundColor Green
-    } else {
+    }
+    else {
         Write-Host "Build venv already exists" -ForegroundColor Yellow
     }
     
@@ -89,14 +91,18 @@ function Invoke-Build {
     # Run PyInstaller build
     & "$ProjectRoot\build\build.ps1"
     
-    # Post-build: Seed doc_gallery with sample documents
-    Write-Host "Seeding doc_gallery with sample documents..." -ForegroundColor Gray
-    $DocGallery = "$ProjectRoot\build\output\doc_gallery"
+    # Post-build: Seed workspace with sample documents
+    Write-Host "Seeding workspace with sample documents..." -ForegroundColor Gray
+    $DocGallery = "$ProjectRoot\build\output\workspace"
     if (-not (Test-Path $DocGallery)) {
         New-Item -ItemType Directory -Path $DocGallery -Force | Out-Null
     }
     Copy-Item "$ProjectRoot\README.md" "$DocGallery\Welcome.md" -Force
-    Copy-Item "$ProjectRoot\doc\USER_GUIDE.md" "$DocGallery\UserGuide.md" -Force
+    Copy-Item "$ProjectRoot\docs\USER_GUIDE.md" "$DocGallery\UserGuide.md" -Force
+    # Copy examples if they exist
+    if (Test-Path "$ProjectRoot\examples\*") {
+        Copy-Item "$ProjectRoot\examples\*" "$DocGallery\" -Recurse -Force
+    }
     Write-Host "Sample documents added: Welcome.md, UserGuide.md" -ForegroundColor Green
 }
 
@@ -120,7 +126,8 @@ function Invoke-Release {
     $ExePath = "$ProjectRoot\build\output\OmniDoc_v$Version.exe"
     if (Test-Path $ExePath) {
         Copy-Item $ExePath $ArchiveDir\
-    } else {
+    }
+    else {
         Write-Host "ERROR: Executable not found at $ExePath" -ForegroundColor Red
         exit 1
     }
@@ -129,11 +136,15 @@ function Invoke-Release {
     Copy-Item "$ProjectRoot\VERSION" $ArchiveDir\
     Copy-Item "$ProjectRoot\README.md" $ArchiveDir\
     Copy-Item "$ProjectRoot\RELEASE_NOTES_v$Version.md" $ArchiveDir\ -ErrorAction SilentlyContinue
-    Copy-Item -Recurse "$ProjectRoot\doc" $ArchiveDir\
+    Copy-Item -Recurse "$ProjectRoot\docs" $ArchiveDir\
+    
+    # Create workspace in release
+    New-Item -ItemType Directory -Path "$ArchiveDir\workspace" -Force | Out-Null
+    Copy-Item "$ProjectRoot\examples\*" "$ArchiveDir\workspace\" -Recurse -Force
     
     # Create release notes
     $PythonVer = & $Python --version
-    $Platform = if([Environment]::Is64BitOperatingSystem){'x64'}else{'x86'}
+    $Platform = if ([Environment]::Is64BitOperatingSystem) { 'x64' }else { 'x86' }
     $ReleaseDate = Get-Date -Format 'yyyy-MM-dd HH:mm:ss'
     
     "# OmniDoc v$Version`n" | Out-File "$ArchiveDir\RELEASE.md" -Encoding UTF8
@@ -220,10 +231,12 @@ function Invoke-Test {
     if (Test-Path $Python) {
         if (Test-Path "$ProjectRoot\tests") {
             & $Python -m pytest tests\ -v
-        } else {
+        }
+        else {
             Write-Host "No tests directory found" -ForegroundColor Yellow
         }
-    } else {
+    }
+    else {
         Write-Host "ERROR: Build venv not found. Run '.\make.ps1 setup' first" -ForegroundColor Red
         exit 1
     }
@@ -235,7 +248,8 @@ function Invoke-Run {
     
     if (Test-Path $Python) {
         & $Python run.py
-    } else {
+    }
+    else {
         Write-Host "ERROR: Build venv not found. Run '.\make.ps1 setup' first" -ForegroundColor Red
         exit 1
     }

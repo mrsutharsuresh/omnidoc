@@ -19,6 +19,8 @@ All notable changes to this project will be documented in this file.
 - **Smart Feature**: Removed experimental "Smart Toggle" feature code and UI elements (deferred to v1.1).
 - **Navigation**: Fixed floating "Top" button icon and styling.
 - **Theme Icon**: Fixed critical bug where theme toggle displayed a music note icon instead of a moon icon due to Unicode mismatch.
+- **Layout Redesign**: Implemented modern, centered document layout (max-width 1000px) with fixed 32px padding, replacing inconsistent percentage-based margins.
+- **Project Structure**: Renamed `doc` to `docs` (standard) and refactored sample content from `workspace` to `examples` (source) -> `workspace` (release).
 
 ## [v1.0.0] - 2025-12-28
 - Initial Release

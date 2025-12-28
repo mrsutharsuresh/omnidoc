@@ -217,14 +217,14 @@ Md_File_Reader/
 │   ├── features/       # Feature modules
 │   └── templates/      # HTML templates
 ├── tests/              # Test suite
-├── doc/                # Documentation
-├── doc_gallery/        # Sample documents
+├── docs/               # Documentation
+├── examples/           # Sample documents
 └── releases/           # Release artifacts
 ```
 
 ## Resources
-- **Documentation**: `doc/USER_GUIDE.md`
+- **Documentation**: `docs/USER_GUIDE.md`
 - **Contributing**: `CONTRIBUTING.md`
-- **Changelog**: `doc/CHANGELOG.md`
-- **Build Guide**: `doc/BUILD.md`
-- **Standards**: `doc/OPEN_SOURCE_STANDARDS.md`
+- **Changelog**: `docs/CHANGELOG.md`
+- **Build Guide**: `docs/BUILD.md`
+- **Standards**: `docs/OPEN_SOURCE_STANDARDS.md`

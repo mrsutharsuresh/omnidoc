@@ -75,9 +75,9 @@ setup(
     },
     keywords='markdown documentation viewer executive presentation toc mermaid diagrams',
     project_urls={
-        'Documentation': 'https://github.com/omnidoc-org/omnidoc/tree/main/doc',
+        'Documentation': 'https://github.com/omnidoc-org/omnidoc/tree/main/docs',
         'Source': 'https://github.com/omnidoc-org/omnidoc',
-        'Changelog': 'https://github.com/omnidoc-org/omnidoc/blob/main/doc/CHANGELOG.md',
+        'Changelog': 'https://github.com/omnidoc-org/omnidoc/blob/main/docs/CHANGELOG.md',
         'Bug Tracker': 'https://github.com/omnidoc-org/omnidoc/issues',
     },
 )

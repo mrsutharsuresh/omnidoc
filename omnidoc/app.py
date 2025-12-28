@@ -127,9 +127,14 @@ def load_config():
                 return json.load(f)
         except Exception as e:
             logger.error(f"Failed to load config: {e}")
+    # Determine default workspace
+    default_workspace = PROJECT_ROOT / 'workspace'
+    if not default_workspace.exists() and (PROJECT_ROOT / 'examples').exists():
+        default_workspace = PROJECT_ROOT / 'examples'
+
     return {
-        'workspaces': [str(PROJECT_ROOT / 'doc_gallery')],
-        'active_workspace': str(PROJECT_ROOT / 'doc_gallery'),
+        'workspaces': [str(default_workspace)],
+        'active_workspace': str(default_workspace),
         'recent_workspaces': []
     }
 

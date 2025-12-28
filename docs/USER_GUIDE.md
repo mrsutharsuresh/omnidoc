@@ -456,7 +456,7 @@ OmniDoc/
 │       ├── view.html        # Document viewer
 │       └── docs.html        # Documentation page
 ├── markdown_files/          # Your markdown files
-├── doc/                     # Project documentation
+├── docs/                    # Project documentation
 │   ├── USER_GUIDE.md       # This file
 │   ├── CHANGELOG.md        # Release history
 │   └── VERSION.md          # Version management

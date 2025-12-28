@@ -10,7 +10,7 @@
 OmniDoc is an enterprise-grade, open-source documentation platform designed to handle **any** input and deliver **any** output. It transforms static Markdown into a dynamic, executive-ready presentation layer with intelligent diagramming and structure awareness.
 
 ## 🔮 Future Roadmap
-- **Smart Conversions** (v1.1/1.2): Automatic transformation of ASCII tables, SIP diagrams, and network topologies into rich visualizations. [See details](doc/FUTURE_FEATURES.md)
+- **Smart Conversions** (v1.1/1.2): Automatic transformation of ASCII tables, SIP diagrams, and network topologies into rich visualizations. [See details](docs/FUTURE_FEATURES.md)
 - **AI-Powered Generation**: Zero-touch creation of PPTs and document variations.
 - **MCP Server**: Function as a Model Context Protocol (MCP) server to provide documentation context to LLMs.
 - **Plugin Ecosystem**: Extensions for any data source.
@@ -74,9 +74,9 @@ python run.py
 
 ## 📚 Documentation
 
-Detailed guides are available in the `doc/` directory:
-- [User Guide](doc/USER_GUIDE.md)
-- [Architecture Overview](doc/ARCHITECTURE.md)
+Detailed guides are available in the `docs/` directory:
+- [User Guide](docs/USER_GUIDE.md)
+- [Architecture Overview](docs/ARCHITECTURE.md)
 - [Contributing Guidelines](CONTRIBUTING.md)
 
 ---

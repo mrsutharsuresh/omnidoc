@@ -21,7 +21,7 @@ OmniDoc/
 │       ├── view.html          # Document viewer
 │       └── docs.html          # Documentation viewer
 │
-├── doc/                       # Project documentation
+├── docs/                      # Project documentation
 │   ├── README.md              # Documentation index
 │   ├── USER_GUIDE.md          # User manual
 │   ├── BUILD.md               # Build instructions
@@ -32,7 +32,7 @@ OmniDoc/
 │   ├── VERSION.md             # Version tracking
 │   └── VIBRANT_UPDATE.md      # UI updates
 │
-├── doc_gallery/               # Sample markdown files
+├── examples/                  # Sample markdown files
 │   ├── sample.md
 │   ├── 45CPS_EXECUTIVE_BRIEFING.md
 │   └── [more samples...]
@@ -41,8 +41,7 @@ OmniDoc/
 │   ├── v1.0.0/               # Version-specific build
 │   │   ├── OmniDoc.exe    # Standalone executable
 │   │   ├── README.md
-│   │   ├── doc/              # Documentation
-│   │   └── doc_gallery/      # Samples
+│   │   └── examples/         # Samples
 │   ├── OmniDoc-v1.0.0-Windows-x64.zip
 │   ├── CHECKSUMS.txt         # SHA256 verification
 │   └── README.md             # Release notes
@@ -172,7 +171,7 @@ mkdir releases/v1.0.0
 cp dist/DocPresent.exe releases/v1.0.0/
 cp README.md releases/v1.0.0/
 cp -r doc releases/v1.0.0/
-cp -r doc_gallery releases/v1.0.0/
+cp -r workspace releases/v1.0.0/
 
 # Create archive
 cd releases
@@ -193,8 +192,8 @@ sha256sum DocPresent-v1.0.0-Windows-x64.zip > CHECKSUMS.txt
 
 ### Tracked Files
 - Source code: `doc_viewer/`
-- Documentation: `doc/`, `README.md`
-- Samples: `doc_gallery/`
+- Documentation: `docs/`, `README.md`
+- Samples: `examples/`
 - Configuration: `pyproject.toml`, `setup.py`, `requirements.txt`
 - Build specs: `DocPresent.spec`, `MANIFEST.in`
 
