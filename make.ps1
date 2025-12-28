@@ -18,7 +18,7 @@ $Python = "$BuildVenv\Scripts\python.exe"
 function Show-Help {
     Write-Host ""
     Write-Host "========================================" -ForegroundColor Cyan
-    Write-Host "  OmniDoc v$Version - Build System  " -ForegroundColor Cyan
+    Write-Host "  DocNexus v$Version - Build System  " -ForegroundColor Cyan
     Write-Host "========================================" -ForegroundColor Cyan
     Write-Host ""
     Write-Host "Python Environment:" -ForegroundColor Yellow
@@ -118,12 +118,12 @@ function Invoke-Release {
     Invoke-Build
     
     # Create timestamped release directory
-    $ArchiveDir = "$ProjectRoot\dist\archive\OmniDoc_v$Version-$Timestamp"
+    $ArchiveDir = "$ProjectRoot\dist\archive\DocNexus_v$Version-$Timestamp"
     Write-Host "Creating timestamped release..." -ForegroundColor Yellow
     New-Item -ItemType Directory -Path $ArchiveDir -Force | Out-Null
     
     # Copy executable from build/output
-    $ExePath = "$ProjectRoot\build\output\OmniDoc_v$Version.exe"
+    $ExePath = "$ProjectRoot\build\output\DocNexus_v$Version.exe"
     if (Test-Path $ExePath) {
         Copy-Item $ExePath $ArchiveDir\
     }
@@ -147,16 +147,16 @@ function Invoke-Release {
     $Platform = if ([Environment]::Is64BitOperatingSystem) { 'x64' }else { 'x86' }
     $ReleaseDate = Get-Date -Format 'yyyy-MM-dd HH:mm:ss'
     
-    "# OmniDoc v$Version`n" | Out-File "$ArchiveDir\RELEASE.md" -Encoding UTF8
+    "# DocNexus v$Version`n" | Out-File "$ArchiveDir\RELEASE.md" -Encoding UTF8
     "`nRelease Date: $ReleaseDate" | Add-Content "$ArchiveDir\RELEASE.md"
     "Platform: Windows-$Platform" | Add-Content "$ArchiveDir\RELEASE.md"
     "Python: Built with $PythonVer`n" | Add-Content "$ArchiveDir\RELEASE.md"
     "`n## Quick Start`n" | Add-Content "$ArchiveDir\RELEASE.md"
-    ".\OmniDoc_v$Version.exe`n" | Add-Content "$ArchiveDir\RELEASE.md"
+    ".\DocNexus_v$Version.exe`n" | Add-Content "$ArchiveDir\RELEASE.md"
     "Then open http://localhost:8000`n" | Add-Content "$ArchiveDir\RELEASE.md"
     
     # Create checksums
-    $Hash = Get-FileHash "$ArchiveDir\OmniDoc_v$Version.exe" -Algorithm SHA256
+    $Hash = Get-FileHash "$ArchiveDir\DocNexus_v$Version.exe" -Algorithm SHA256
     "$($Hash.Algorithm): $($Hash.Hash)" | Out-File "$ArchiveDir\checksums.txt" -Encoding UTF8
     
     Write-Host "Release created: $ArchiveDir" -ForegroundColor Green
@@ -178,7 +178,7 @@ function Invoke-Release {
     Write-Host "========================================" -ForegroundColor Green
     Write-Host ""
     Write-Host "Locations:" -ForegroundColor Yellow
-    Write-Host "   Latest:  dist\latest\OmniDoc_v$Version.exe" -ForegroundColor Cyan
+    Write-Host "   Latest:  dist\latest\DocNexus_v$Version.exe" -ForegroundColor Cyan
     Write-Host "   Release: $ArchiveDir" -ForegroundColor Cyan
     Write-Host ""
     Write-Host "Release Contents:" -ForegroundColor Yellow
@@ -209,7 +209,7 @@ function Invoke-Clean {
     Write-Host "Cleaning build artifacts..." -ForegroundColor Yellow
     Remove-Item -Recurse -Force "$ProjectRoot\build\output" -ErrorAction SilentlyContinue
     Remove-Item -Recurse -Force "$ProjectRoot\build\pyinstaller" -ErrorAction SilentlyContinue
-    Remove-Item -Recurse -Force "$ProjectRoot\dist\OmniDoc_v$Version.exe" -ErrorAction SilentlyContinue
+    Remove-Item -Recurse -Force "$ProjectRoot\dist\DocNexus_v$Version.exe" -ErrorAction SilentlyContinue
     Remove-Item "$ProjectRoot\*.spec" -ErrorAction SilentlyContinue
     Get-ChildItem -Path $ProjectRoot -Filter "__pycache__" -Recurse -Directory | Remove-Item -Recurse -Force -ErrorAction SilentlyContinue
     Write-Host "Cleaned (build\venv preserved)" -ForegroundColor Green

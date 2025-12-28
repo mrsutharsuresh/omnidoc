@@ -1,10 +1,10 @@
-# Future Features - OmniDoc
+# Future Features - DocNexus
 
 > **These features are planned for future releases and are currently in development.**
 
 ## Smart Document Conversion (Coming Soon)
 
-OmniDoc includes an advanced conversion pipeline that will intelligently transform text-based diagrams and data into rich, interactive visualizations. This feature is being refined and will be enabled in a future release.
+DocNexus includes an advanced conversion pipeline that will intelligently transform text-based diagrams and data into rich, interactive visualizations. This feature is being refined and will be enabled in a future release.
 
 ### 🎨 Smart Features Overview
 
@@ -62,7 +62,7 @@ Router1 --- Router2
 ## Technical Details
 
 ### Implementation Status
-- ✅ **Code Complete**: All smart conversion functions are implemented in `omnidoc/features/smart_convert.py`
+- ✅ **Code Complete**: All smart conversion functions are implemented in `DocNexus/features/smart_convert.py`
 - ⏳ **UI Integration**: Temporarily disabled while we refine the user experience
 - 📋 **Documentation**: Being finalized
 - 🧪 **Testing**: Undergoing additional validation
@@ -75,9 +75,9 @@ Smart features use a **pipeline architecture**:
 4. **Rendering**: Final output is injected into the document
 
 ### Backend Modules
-- `omnidoc/features/smart_convert.py` - Core conversion logic
-- `omnidoc/features/standard.py` - Baseline features (already active)
-- `omnidoc/core/renderer.py` - Markdown rendering engine
+- `DocNexus/features/smart_convert.py` - Core conversion logic
+- `DocNexus/features/standard.py` - Baseline features (already active)
+- `DocNexus/core/renderer.py` - Markdown rendering engine
 
 ---
 
@@ -104,9 +104,9 @@ We'll announce the release date once testing is complete. Follow the project on 
 
 Developers can test smart features by:
 
-1. Setting `enable_experimental = True` in `omnidoc/app.py` (line 893)
+1. Setting `enable_experimental = True` in `DocNexus/app.py` (line 893)
 2. Accessing documents with `?smart=true` query parameter
-3. Reviewing the code in `omnidoc/features/smart_convert.py`
+3. Reviewing the code in `DocNexus/features/smart_convert.py`
 
 **Note**: This is for development/testing only. The API may change before official release.
 

@@ -3,7 +3,7 @@ requires = ["setuptools>=61.0", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "omnidoc"
+name = "docnexus"
 version = "1.0.0"
 description = "OmniDoc - The Ultimate All-in-One Document Engine"
 readme = "README.md"

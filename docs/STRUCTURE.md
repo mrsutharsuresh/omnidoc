@@ -1,11 +1,11 @@
-# OmniDoc - Project Structure
+# DocNexus - Project Structure
 
-This document describes the standard Python project structure for OmniDoc.
+This document describes the standard Python project structure for DocNexus.
 
 ## Directory Layout
 
 ```
-OmniDoc/
+DocNexus/
 ├── doc_viewer/                 # Main application package
 │   ├── __init__.py            # Package initialization & version
 │   ├── app.py                 # Flask application setup
@@ -39,10 +39,10 @@ OmniDoc/
 │
 ├── releases/                  # Distribution packages
 │   ├── v1.0.0/               # Version-specific build
-│   │   ├── OmniDoc.exe    # Standalone executable
+│   │   ├── DocNexus.exe    # Standalone executable
 │   │   ├── README.md
 │   │   └── examples/         # Samples
-│   ├── OmniDoc-v1.0.0-Windows-x64.zip
+│   ├── DocNexus-v1.0.0-Windows-x64.zip
 │   ├── CHECKSUMS.txt         # SHA256 verification
 │   └── README.md             # Release notes
 │
@@ -58,7 +58,7 @@ OmniDoc/
 ├── MANIFEST.in               # Package data rules
 ├── run.py                     # Development server
 ├── start.bat                  # Windows launcher
-├── OmniDoc.spec           # PyInstaller config
+├── DocNexus.spec           # PyInstaller config
 └── .gitignore                # Git exclusions
 
 ```

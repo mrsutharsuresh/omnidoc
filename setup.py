@@ -7,7 +7,7 @@ import os
 
 # Read version from package
 def read_version():
-    version_file = os.path.join('omnidoc', '__init__.py')
+    version_file = os.path.join('docnexus', '__init__.py')
     with open(version_file, 'r', encoding='utf-8') as f:
         for line in f:
             if line.startswith('__version__'):
@@ -31,15 +31,15 @@ def read_requirements():
     return []
 
 setup(
-    name='omnidoc',
+    name='docnexus',
     version=read_version(),
-    author='OmniDoc Maintainers',
-    author_email='maintainers@omnidoc.org',
-    maintainer='OmniDoc Open Source Community',
-    description='OmniDoc - The Ultimate All-in-One Document Engine',
+    author='DocNexus Maintainers',
+    author_email='maintainers@docnexus.org',
+    maintainer='DocNexus Open Source Community',
+    description='DocNexus - The Ultimate All-in-One Document Engine',
     long_description=read_long_description(),
     long_description_content_type='text/markdown',
-    url='https://github.com/omnidoc-org/omnidoc',
+    url='https://github.com/omnidoc-org/docnexus',
     packages=find_packages(exclude=['tests', 'tests.*', 'releases', 'build', 'dist']),
     classifiers=[
         'Development Status :: 5 - Production/Stable',
@@ -64,20 +64,21 @@ setup(
     install_requires=read_requirements(),
     entry_points={
         'console_scripts': [
-            'omnidoc=omnidoc.cli:main',
+        'console_scripts': [
+            'docnexus=docnexus.cli:main',
         ],
     },
     include_package_data=True,
     package_data={
-        'omnidoc': [
+        'docnexus': [
             'templates/*.html',
         ],
     },
     keywords='markdown documentation viewer executive presentation toc mermaid diagrams',
     project_urls={
-        'Documentation': 'https://github.com/omnidoc-org/omnidoc/tree/main/docs',
-        'Source': 'https://github.com/omnidoc-org/omnidoc',
-        'Changelog': 'https://github.com/omnidoc-org/omnidoc/blob/main/docs/CHANGELOG.md',
-        'Bug Tracker': 'https://github.com/omnidoc-org/omnidoc/issues',
+        'Documentation': 'https://github.com/omnidoc-org/docnexus/tree/main/docs',
+        'Source': 'https://github.com/omnidoc-org/docnexus',
+        'Changelog': 'https://github.com/omnidoc-org/docnexus/blob/main/docs/CHANGELOG.md',
+        'Bug Tracker': 'https://github.com/omnidoc-org/docnexus/issues',
     },
 )

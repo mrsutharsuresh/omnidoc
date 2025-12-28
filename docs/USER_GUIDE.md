@@ -1,4 +1,4 @@
-# OmniDoc - Complete Guide
+# DocNexus - Complete Guide
 
 **Version 1.0.0**
 
@@ -134,7 +134,7 @@ Then open your browser to: http://localhost:8000
    ```powershell
    # If using git
    git clone <repository-url>
-   cd OmniDoc
+   cd DocNexus
    ```
 
 2. **Verify Python Installation**
@@ -234,7 +234,7 @@ The viewer will:
 
 ### Server Configuration
 
-Edit `omnidoc/app.py` to customize:
+Edit `DocNexus/app.py` to customize:
 
 ```python
 # Change port (default: 8000)
@@ -446,8 +446,8 @@ Place images in the `markdown_files/` directory or use absolute URLs.
 ### File Structure
 
 ```
-OmniDoc/
-├── omnidoc/                # Main package
+DocNexus/
+├── DocNexus/                # Main package
 │   ├── __init__.py          # Version info
 │   ├── app.py               # Flask application
 │   ├── cli.py               # CLI interface
@@ -527,4 +527,4 @@ This project is internal tooling for documentation management.
 
 **Version**: 1.0.0  
 **Last Updated**: December 25, 2025  
-**Maintained By**: OmniDoc Maintainers
+**Maintained By**: DocNexus Maintainers

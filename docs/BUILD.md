@@ -1,4 +1,4 @@
-# Production Build Instructions - OmniDoc v1.0.0
+# Production Build Instructions - DocNexus v1.0.0
 
 ## Prerequisites
 
@@ -11,26 +11,26 @@ pip install pyinstaller
 
 ### Option 1: Using Spec File (Recommended)
 ```bash
-pyinstaller OmniDoc.spec
+pyinstaller DocNexus.spec
 ```
 
 ### Option 2: Direct Build
 ```bash
-pyinstaller --onefile --name OmniDoc --add-data "doc_viewer/templates;doc_viewer/templates" --add-data "examples;examples" --add-data "docs;docs" --hidden-import flask --hidden-import markdown run.py
+pyinstaller --onefile --name DocNexus --add-data "doc_viewer/templates;doc_viewer/templates" --add-data "examples;examples" --add-data "docs;docs" --hidden-import flask --hidden-import markdown run.py
 ```
 
 ## Output
 
 The executable will be created in:
-- `dist/OmniDoc.exe` (Windows)
-- `dist/OmniDoc` (Linux/Mac)
+- `dist/DocNexus.exe` (Windows)
+- `dist/DocNexus` (Linux/Mac)
 
 ## Distribution Package
 
 Create a distribution folder with:
 ```
-OmniDoc-v1.0.0/
-├── OmniDoc.exe          # Main executable
+DocNexus-v1.0.0/
+├── DocNexus.exe          # Main executable
 ├── workspace/              # Sample markdown files
 │   └── (your .md files)
 ├── README.md               # Documentation
@@ -40,24 +40,24 @@ OmniDoc-v1.0.0/
 ## Usage
 
 ### End Users
-1. Extract the OmniDoc-v1.0.0.zip
+1. Extract the DocNexus-v1.0.0.zip
 2. Add your .md files to the `workspace/` folder
-3. Run `OmniDoc.exe`
+3. Run `DocNexus.exe`
 4. Browser opens at http://localhost:8000
 
 ### Command Line Options
 ```bash
 # Start with default settings
-OmniDoc.exe
+DocNexus.exe
 
 # Custom port
-OmniDoc.exe --port 8080
+DocNexus.exe --port 8080
 
 # Custom host and port
-OmniDoc.exe --host 0.0.0.0 --port 8080
+DocNexus.exe --host 0.0.0.0 --port 8080
 
 # Debug mode
-OmniDoc.exe --debug
+DocNexus.exe --debug
 ```
 
 ## Testing the Executable
@@ -113,12 +113,12 @@ VSVersionInfo(
       StringTable(
         u'040904B0',
         [StringStruct(u'CompanyName', u'Your Company'),
-        StringStruct(u'FileDescription', u'OmniDoc - Executive Documentation Platform'),
+        StringStruct(u'FileDescription', u'DocNexus - Executive Documentation Platform'),
         StringStruct(u'FileVersion', u'1.0.0'),
-        StringStruct(u'InternalName', u'OmniDoc'),
+        StringStruct(u'InternalName', u'DocNexus'),
         StringStruct(u'LegalCopyright', u'Copyright (c) 2025'),
-        StringStruct(u'OriginalFilename', u'OmniDoc.exe'),
-        StringStruct(u'ProductName', u'OmniDoc'),
+        StringStruct(u'OriginalFilename', u'DocNexus.exe'),
+        StringStruct(u'ProductName', u'DocNexus'),
         StringStruct(u'ProductVersion', u'1.0.0')])
       ]
     ),
@@ -153,8 +153,8 @@ exe = EXE(
 ## Release Artifacts
 
 Create these files for release:
-- `OmniDoc-v1.0.0-Windows-x64.zip`
-- `OmniDoc-v1.0.0-Linux-x64.tar.gz`
-- `OmniDoc-v1.0.0-MacOS-x64.tar.gz`
+- `DocNexus-v1.0.0-Windows-x64.zip`
+- `DocNexus-v1.0.0-Linux-x64.tar.gz`
+- `DocNexus-v1.0.0-MacOS-x64.tar.gz`
 - `SHA256SUMS.txt`
 - `RELEASE_NOTES.md`

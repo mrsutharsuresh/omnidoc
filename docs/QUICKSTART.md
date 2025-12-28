@@ -83,7 +83,7 @@ ptw
 python -m build
 
 # Build executable
-pyinstaller OmniDoc.spec
+pyinstaller DocNexus.spec
 
 # Both will create artifacts in dist/
 ```

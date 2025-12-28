@@ -5,20 +5,20 @@ $Output = "$BuildDir\output"
 $Venv = "$BuildDir\venv"
 $Python = "$Venv\Scripts\python.exe"
 $PyInstaller = "$Venv\Scripts\pyinstaller.exe"
-$Version = (Get-Content "$ProjectRoot\omnidoc\__init__.py" | Select-String "__version__ = '(.*)'").Matches.Groups[1].Value
+$Version = (Get-Content "$ProjectRoot\docnexus\__init__.py" | Select-String "__version__ = '(.*)'").Matches.Groups[1].Value
 
 if (-not (Test-Path $Output)) { New-Item -ItemType Directory -Path $Output | Out-Null }
 
-Write-Host "Building OmniDoc v$Version..."
+Write-Host "Building DocNexus v$Version..."
 Write-Host "Using PyInstaller..."
 
 & $PyInstaller --noconfirm --clean `
-    --name "OmniDoc_v$Version" `
+    --name "DocNexus_v$Version" `
     --onefile `
-    --add-data "$ProjectRoot\omnidoc\templates;omnidoc\templates" `
-    --add-data "$ProjectRoot\omnidoc\static;omnidoc\static" `
+    --add-data "$ProjectRoot\docnexus\templates;docnexus\templates" `
+    --add-data "$ProjectRoot\docnexus\static;docnexus\static" `
     --paths "$ProjectRoot" `
-    --hidden-import "omnidoc.features.smart_convert" `
+    --hidden-import "docnexus.features.smart_convert" `
     --hidden-import "engineio.async_drivers.threading" `
     --hidden-import "pymdownx" `
     --hidden-import "pymdownx.betterem" `
@@ -43,4 +43,4 @@ Write-Host "Using PyInstaller..."
     --specpath "$BuildDir" `
     "$ProjectRoot\run.py"
 
-Write-Host "Build Complete: $Output\OmniDoc_v$Version.exe" -ForegroundColor Green
+Write-Host "Build Complete: $Output\DocNexus_v$Version.exe" -ForegroundColor Green

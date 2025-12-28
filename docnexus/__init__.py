@@ -1,5 +1,5 @@
 """
-OmniDoc - The Ultimate All-in-One Document Engine
+DocNexus - The Ultimate All-in-One Document Engine
 """
 
 __version__ = '1.0.1'

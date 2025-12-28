@@ -1,6 +1,6 @@
-# Contributing to OmniDoc
+# Contributing to DocNexus
 
-Thank you for your interest in contributing to OmniDoc! We welcome contributions from everyone.
+Thank you for your interest in contributing to DocNexus! We welcome contributions from everyone.
 
 ## Getting Started
 

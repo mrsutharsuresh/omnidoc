@@ -5,6 +5,7 @@ All notable changes to this project will be documented in this file.
 ## [v1.0.1] - 2025-12-28
 
 ### Added
+- **Project Rename**: Officially renamed from "OmniDoc" to "**DocNexus**".
 - **Bootstrap Icons**: Integration of Bootstrap Icons for consistent, high-quality SVG iconography across the application.
 - **Mobile Optimization**: improved responsive design with adaptive margins and typography scaling for mobile devices.
 - **Unified UI**: Standardized "glassmorphic" button styling for Edit, Export, Theme Toggle, and Top buttons.

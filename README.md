@@ -1,13 +1,13 @@
-# OmniDoc
+# DocNexus
 
 > **The Ultimate All-in-One Document Engine.**  
 > *Authority. Universality. Power.*
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
-[![Build Status](https://img.shields.io/badge/build-passing-brightgreen.svg)](https://github.com/omnidoc-org/omnidoc)
+[![Build Status](https://img.shields.io/badge/build-passing-brightgreen.svg)](https://github.com/omnidoc-org/docnexus)
 
-OmniDoc is an enterprise-grade, open-source documentation platform designed to handle **any** input and deliver **any** output. It transforms static Markdown into a dynamic, executive-ready presentation layer with intelligent diagramming and structure awareness.
+DocNexus is an enterprise-grade, open-source documentation platform designed to handle **any** input and deliver **any** output. It transforms static Markdown into a dynamic, executive-ready presentation layer with intelligent diagramming and structure awareness.
 
 ## 🔮 Future Roadmap
 - **Smart Conversions** (v1.1/1.2): Automatic transformation of ASCII tables, SIP diagrams, and network topologies into rich visualizations. [See details](docs/FUTURE_FEATURES.md)
@@ -15,7 +15,7 @@ OmniDoc is an enterprise-grade, open-source documentation platform designed to h
 - **MCP Server**: Function as a Model Context Protocol (MCP) server to provide documentation context to LLMs.
 - **Plugin Ecosystem**: Extensions for any data source.
 
-## 🚀 The Verdict: Why OmniDoc?
+## 🚀 The Verdict: Why DocNexus?
 
 - **Scalability**: Built to evolve. Whether you're adding AI features or supporting new formats, "Omni" fits perfectly.
 - **Professionalism**: An enterprise-grade solution that feels at home in the boardroom or the dev lab.
@@ -26,12 +26,12 @@ OmniDoc is an enterprise-grade, open-source documentation platform designed to h
 ## ✨ Features
 
 ### 📄 Universal Format Support
-OmniDoc handles more than just Markdown.
+DocNexus handles more than just Markdown.
 - **Input Formats**: `.md`, `.txt`, and **Word Documents (.docx)**.
 - **Export Capabilities**: Convert your interactive docs to **PDF** or **Word** for offline distribution.
 
 ### 🧠 Intelligent Conversions
-OmniDoc doesn't just display text; it understands it.
+DocNexus doesn't just display text; it understands it.
 - **Smart Sequence Diagrams**: Automatically converts text-based call flows or conversations into interactive Mermaid sequence diagrams.
 - **Network Topology**: Recognizes ASCII diagrams and transforms them into professional network topology visualizations.
 - **Data Tables**: Instantly formats ASCII tables into sortable, clear data grids.
@@ -55,14 +55,14 @@ Double-click `start.bat` to launch the server instantly.
 
 ### CLI Installation
 ```bash
-pip install omnidoc
-omnidoc start
+pip install docnexus
+docnexus start
 ```
 
 ### From Source
 ```bash
-git clone https://github.com/omnidoc-org/omnidoc.git
-cd omnidoc
+git clone https://github.com/omnidoc-org/docnexus.git
+cd docnexus
 pip install -e .
 python run.py
 # or
@@ -87,4 +87,4 @@ We welcome contributions! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for deta
 
 ## 📄 License
 
-OmniDoc is proudly open source under the [MIT License](LICENSE).
+DocNexus is proudly open source under the [MIT License](LICENSE).

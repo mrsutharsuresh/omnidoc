@@ -1,4 +1,4 @@
-# OmniDoc Documentation
+# DocNexus Documentation
 
 Complete documentation for DocPresent v1.0.0 - Professional Markdown Documentation Viewer
 

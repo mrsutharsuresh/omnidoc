@@ -59,19 +59,19 @@ except Exception as e:
     mammoth = None
 
 try:
-    from omnidoc.core.renderer import render_baseline, run_pipeline
-    from omnidoc.features.registry import FeatureManager, Feature, FeatureState
-    from omnidoc.features import smart_convert as smart
-    from omnidoc.features.standard import normalize_headings, sanitize_attr_tokens, build_toc, annotate_blocks
+    from docnexus.core.renderer import render_baseline, run_pipeline
+    from docnexus.features.registry import FeatureManager, Feature, FeatureState
+    from docnexus.features import smart_convert as smart
+    from docnexus.features.standard import normalize_headings, sanitize_attr_tokens, build_toc, annotate_blocks
 except Exception:
     # allow running as a script: add project root to sys.path, then absolute imports
     PROJECT_ROOT_FOR_PATH = Path(__file__).resolve().parent.parent
     if str(PROJECT_ROOT_FOR_PATH) not in sys.path:
         sys.path.insert(0, str(PROJECT_ROOT_FOR_PATH))
-    from omnidoc.core.renderer import render_baseline, run_pipeline
-    from omnidoc.features.registry import FeatureManager, Feature, FeatureState
-    from omnidoc.features import smart_convert as smart
-    from omnidoc.features.standard import normalize_headings, sanitize_attr_tokens, build_toc, annotate_blocks
+    from docnexus.core.renderer import render_baseline, run_pipeline
+    from docnexus.features.registry import FeatureManager, Feature, FeatureState
+    from docnexus.features import smart_convert as smart
+    from docnexus.features.standard import normalize_headings, sanitize_attr_tokens, build_toc, annotate_blocks
 
 try:
     from . import __version__
@@ -103,7 +103,7 @@ else:
 # Logging Configuration
 LOG_DIR = PROJECT_ROOT / 'logs'
 LOG_DIR.mkdir(exist_ok=True)
-LOG_FILE = LOG_DIR / 'omnidoc.log'
+LOG_FILE = LOG_DIR / 'docnexus.log'
 
 logging.basicConfig(
     level=logging.INFO,
@@ -113,7 +113,7 @@ logging.basicConfig(
         logging.StreamHandler()
     ]
 )
-logger = logging.getLogger('omnidoc')
+logger = logging.getLogger('docnexus')
 logger.info(f"Application starting - Version {VERSION}")
 
 # Workspace Configuration

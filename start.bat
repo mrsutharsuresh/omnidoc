@@ -18,7 +18,7 @@ IF EXIST "%PROJECT_ROOT%run.py" (
     python "%PROJECT_ROOT%run.py"
 ) ELSE (
     ECHO Starting OmniDoc...
-    omnidoc start
+    docnexus start
 )
 
 ENDLOCAL
