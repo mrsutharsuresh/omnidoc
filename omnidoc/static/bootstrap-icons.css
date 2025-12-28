@@ -1,0 +1,31 @@
+/* Bootstrap Icons - Minimal subset for OmniDoc */
+@font-face {
+  font-family: "bootstrap-icons";
+  src: url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/fonts/bootstrap-icons.woff2?dd67030699838ea613ee6dbda90effa6") format("woff2"),
+       url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/fonts/bootstrap-icons.woff?dd67030699838ea613ee6dbda90effa6") format("woff");
+}
+
+.bi::before,
+[class^="bi-"]::before,
+[class*=" bi-"]::before {
+  display: inline-block;
+  font-family: "bootstrap-icons" !important;
+  font-style: normal;
+  font-weight: normal !important;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+  vertical-align: -.125em;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Icon definitions */
+.bi-moon-stars-fill::before { content: "\f495"; }
+.bi-sun-fill::before { content: "\f5a1"; }
+.bi-arrow-up::before { content: "\f145"; }
+.bi-pencil-square::before { content: "\f4c9"; }
+.bi-download::before { content: "\f30b"; }
+.bi-file-earmark-pdf::before { content: "\f341"; }
+.bi-file-earmark-word::before { content: "\f34c"; }
+.bi-chevron-left::before { content: "\f282"; }

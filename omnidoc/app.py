@@ -78,7 +78,7 @@ try:
     VERSION = __version__
 except ImportError:
     # Fallback if running directly
-    VERSION = '1.0.0'
+    VERSION = '1.0.1'
 
 app = Flask(__name__, static_folder='static')
 app.config['TEMPLATES_AUTO_RELOAD'] = True
@@ -159,7 +159,8 @@ FEATURES.register(Feature("STD_NORMALIZE", normalize_headings, FeatureState.STAN
 FEATURES.register(Feature("STD_SANITIZE_ATTR", sanitize_attr_tokens, FeatureState.STANDARD))
 FEATURES.register(Feature("STD_TOC", build_toc, FeatureState.STANDARD))
 FEATURES.register(Feature("STD_ANNOTATE", annotate_blocks, FeatureState.STANDARD))
-# EXPERIMENTAL features (smart toggle)
+# EXPERIMENTAL features (smart toggle) - Registered but disabled in v1.0.0
+# Will be re-enabled in v1.1/1.2 with proper UI - see doc/FUTURE_FEATURES.md
 FEATURES.register(Feature("SMART_TABLES", smart.convert_ascii_tables_to_markdown, FeatureState.EXPERIMENTAL))
 FEATURES.register(Feature("SMART_SIP", smart.convert_sip_signaling_to_mermaid, FeatureState.EXPERIMENTAL))
 FEATURES.register(Feature("SMART_TOPOLOGY", smart.convert_topology_to_mermaid, FeatureState.EXPERIMENTAL))
@@ -889,8 +890,9 @@ def view_file(filename):
     """View a specific markdown file."""
     md_path = Path(MD_FOLDER)
     
-    # Experimental features are enabled only when smart=true
-    enable_experimental = request.args.get('smart', 'false').lower() == 'true'
+    # Smart features temporarily disabled - coming in v1.1/1.2
+    # See doc/FUTURE_FEATURES.md for details
+    enable_experimental = False  # TODO: Re-enable with proper UI in future release
     
     # Handle both direct filename and relative path
     file_path = None
@@ -1033,8 +1035,8 @@ def preview_file():
             "max_mb": f"{max_mb:.0f}"
         }, 413
     
-    # Honor smart switch in preview via query param
-    enable_experimental = request.args.get('smart', 'false').lower() == 'true'
+    # Smart features disabled - using baseline rendering only
+    enable_experimental = False
     
     # Use same feature pipeline as file view
     pipeline = FEATURES.build_pipeline(enable_experimental=enable_experimental)
