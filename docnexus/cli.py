@@ -7,10 +7,10 @@ import argparse
 import sys
 from pathlib import Path
 
-# Add parent directory to path to import omnidoc
+# Add parent directory to path to import docnexus
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-from omnidoc import __version__, __description__
+from docnexus import __version__, __description__
 
 
 def print_version():
@@ -21,13 +21,13 @@ def print_version():
 
 def start_server(args):
     """Start the Flask server."""
-    from omnidoc.app import app
+    from docnexus.app import app
     
     host = args.host or 'localhost'
     port = args.port or 8000
     debug = args.debug
     
-    print(f"Starting OmniDoc v{__version__}")
+    print(f"Starting DocNexus v{__version__}")
     print(f"Server: http://{host}:{port}")
     print(f"Documentation: http://{host}:{port}/docs")
     print("Press Ctrl+C to stop")
@@ -39,14 +39,14 @@ def start_server(args):
 def main():
     """Main CLI entry point."""
     parser = argparse.ArgumentParser(
-        description=f'OmniDoc v{__version__}',
+        description=f'DocNexus v{__version__}',
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 Examples:
-  omnidoc --version              Show version information
-  omnidoc start                  Start server on localhost:8000
-  omnidoc start --port 8080      Start server on port 8080
-  omnidoc start --debug          Start server in debug mode
+  docnexus --version              Show version information
+  docnexus start                  Start server on localhost:8000
+  docnexus start --port 8080      Start server on port 8080
+  docnexus start --debug          Start server in debug mode
         """
     )
     

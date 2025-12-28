@@ -12,7 +12,7 @@ from pathlib import Path
 project_root = Path(__file__).parent
 sys.path.insert(0, str(project_root))
 
-from omnidoc.app import app, VERSION
+from docnexus.app import app, VERSION
 
 if __name__ == '__main__':
     # Debug mode ON by default (development)
@@ -20,7 +20,7 @@ if __name__ == '__main__':
     debug_mode = os.getenv('PRODUCTION', 'False').lower() != 'true'
     
     print(f"\n" + "="*60)
-    print(f"  OmniDoc - The Ultimate All-in-One Document Engine v{VERSION}")
+    print(f"  DocNexus - The Ultimate All-in-One Document Engine v{VERSION}")
     print("="*60)
     print(f"\n  🌐 Server running at: http://localhost:8000")
     print(f"  🎨 Smart Conversion: Toggle in document view")
