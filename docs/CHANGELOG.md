@@ -6,6 +6,7 @@ All notable changes to this project will be documented in this file.
 ### Added
 - **Configurable Workspace**: New settings UI to change the active workspace folder directly from the application.
 - **Documentation Access**: Added direct link to documentation in the header.
+- **Multi-page Documentation Browser**: New sidebar navigation allows browsing all documentation files directly within the application.
 
 ### Fixed
 - **Workspace Configuration**: Fixed path resolution issues that caused "Workspace not configured" errors.

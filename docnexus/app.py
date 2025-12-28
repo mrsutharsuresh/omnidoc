@@ -935,25 +935,57 @@ def view_file(filename):
     
     return render_template('view.html', file=file_info)
 
+def get_documentation_files():
+    """Get list of available documentation files."""
+    if not DOCS_FOLDER.exists():
+        return []
+    
+    docs = []
+    for f in DOCS_FOLDER.glob('*.md'):
+        if f.name.lower() != 'readme.md':  # Exclude raw readme if user guide exists
+             docs.append({
+                 'name': f.stem.replace('_', ' ').title(),
+                 'filename': f.name,
+                 'active': False
+             })
+    # Sort: User Guide first, then alphabetical
+    docs.sort(key=lambda x: (x['filename'] != 'USER_GUIDE.md', x['name']))
+    return docs
+
 @app.route('/docs')
-def documentation():
+@app.route('/docs/<path:filename>')
+def documentation(filename=None):
     """Serve the documentation page."""
-    docs_path = Path(DOCS_FOLDER) / 'USER_GUIDE.md'
+    if not filename:
+        filename = 'USER_GUIDE.md'
+    
+    # Security: Ensure filename is just a name, not a path
+    filename = Path(filename).name
+    docs_path = Path(DOCS_FOLDER) / filename
     
     if not docs_path.exists():
+        # Fallback to USER_GUIDE if specific file not found, or 404
+        if filename != 'USER_GUIDE.md' and (Path(DOCS_FOLDER) / 'USER_GUIDE.md').exists():
+             return redirect(url_for('documentation'))
         abort(404, description="Documentation not found")
     
-    # Convert documentation markdown to HTML (baseline only)
+    # Convert documentation markdown to HTML
     html_content = render_document_from_file(docs_path, enable_experimental=False)
     
+    # Get navigation list
+    nav_items = get_documentation_files()
+    for item in nav_items:
+        if item['filename'] == filename:
+            item['active'] = True
+            
     doc_info = {
-        'name': 'Documentation',
-        'filename': 'README.md',
+        'name': filename.replace('.md', '').replace('_', ' ').title(),
+        'filename': filename,
         'content': html_content,
         'version': VERSION
     }
     
-    return render_template('docs.html', doc=doc_info)
+    return render_template('docs.html', doc=doc_info, nav_items=nav_items)
 
 @app.route('/preview', methods=['POST'])
 def preview_file():
