@@ -132,15 +132,7 @@
             font-size: 0.9em;
         }
 
-        width: 100%;
-        margin: 0 auto;
-        padding: var(--space-6) var(--space-6);
-        box-sizing: border-box;
-        max-width: 1200px;
-        /* Constrain width for readability like docs.html */
-        flex: 1;
-        /* Grow to fill */
-        }
+
 
         /* Top Nav Overrides for View Page */
         .top-nav {
@@ -517,15 +509,13 @@
             <!-- Right: Actions -->
             <div style="display: flex; gap: 12px; align-items: center;">
                 {% if not file.get('preview_mode') and not file.filename.endswith('.docx') %}
-                {% if not file.get('preview_mode') and not file.filename.endswith('.docx') %}
                 <button class="btn edit-btn" onclick="toggleEditMode()">
                     <i class="bi bi-pencil-square"></i> Edit
                 </button>
                 {% endif %}
-                {% endif %}
 
                 <div class="export-dropdown">
-                    <button class="btn" onclick="toggleExportMenu()">
+                    <button class="btn export-main-btn" onclick="toggleExportMenu()">
                         <i class="bi bi-download"></i> Export
                     </button>
                     <!-- Dropdown Menu -->
@@ -548,7 +538,6 @@
         </div>
     </nav>
 
-    <!-- Main Content -->
     <!-- Main Content -->
     <div class="main-container">
         <main class="content-area">
