@@ -6,7 +6,7 @@ This document describes the standard Python project structure for DocNexus.
 
 ```
 DocNexus/
-├── doc_viewer/                 # Main application package
+├── docnexus/                 # Main application package
 │   ├── __init__.py            # Package initialization & version
 │   ├── app.py                 # Flask application setup
 │   ├── cli.py                 # Command-line interface
@@ -93,10 +93,10 @@ DocNexus/
   - Debug mode enabled
   - Auto-reload on changes
 
-- **doc_viewer/cli.py** - Command-line interface
+- **docnexus/cli.py** - Command-line interface
   - Production entry point
   - Command-line argument parsing
-  - Installed as `docpresent` command
+  - Installed as `docnexus` command
 
 ### Build Configuration
 
@@ -111,9 +111,9 @@ DocNexus/
 ### 1. End Users (Pre-built Executable)
 ```bash
 # Download from releases/
-unzip DocPresent-v1.0.0-Windows-x64.zip
-cd v1.0.0
-./DocPresent.exe
+unzip DocNexus-v1.1.2-Windows-x64.zip
+cd v1.1.2
+./DocNexus.exe
 ```
 
 ### 2. Developers (Source Installation)
@@ -133,10 +133,10 @@ python run.py
 pip install -e .
 
 # Or from PyPI (if published)
-pip install docpresent
+pip install docnexus
 
 # Run installed command
-docpresent
+docnexus
 ```
 
 ## Build Process
@@ -230,5 +230,5 @@ This project follows Python packaging best practices:
 ---
 
 **Last Updated:** December 16, 2025  
-**Version:** 1.0.0  
+**Version:** 1.1.2  
 **Structure:** Standard Python Package

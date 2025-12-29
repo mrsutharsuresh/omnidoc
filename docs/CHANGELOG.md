@@ -9,6 +9,7 @@ All notable changes to this project will be documented in this file.
 - **Configurable Workspace**: New settings UI to change the active workspace folder directly from the application.
 - **Documentation Access**: Added direct link to documentation in the header.
 - **Multi-page Documentation Browser**: New sidebar navigation allows browsing all documentation files directly within the application.
+- **In-Place Editor**: Implemented a rich WYSIWYG editor (Toast UI) allowing direct editing of Markdown files with "Save" and "Cancel" functionality. Includes Safe Mode read-only protection for Word documents.
 
 ### Changed
 - **UI Standardization**: Unified the styling of Theme Toggle, "Back to Hub" buttons, and Icons across Index, Docs, and View pages.

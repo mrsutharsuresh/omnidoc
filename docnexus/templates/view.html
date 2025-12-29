@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ filename }} | DocNexus</title>
+    <title>{{ file.filename }} | DocNexus</title>
     <link rel="icon" type="image/png" href="{{ url_for('static', filename='logo.png') }}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -13,6 +13,10 @@
         rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+
+    <!-- Toast UI Editor -->
+    <link rel="stylesheet" href="https://uicdn.toast.com/editor/latest/toastui-editor.min.css" />
+    <link rel="stylesheet" href="https://uicdn.toast.com/editor/latest/theme/toastui-editor-dark.min.css" />
 
     <!-- Code Highlight Theme (Dynamic) -->
     <link id="highlightTheme" rel="stylesheet"
@@ -196,6 +200,9 @@
             box-shadow: var(--shadow-sm);
             position: relative;
             overflow: hidden;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
         }
 
         .document-header::before {
@@ -362,6 +369,79 @@
             color: var(--color-accent-primary);
         }
 
+        /* Disabled Edit Button */
+        .edit-btn:disabled,
+        .edit-btn.disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            pointer-events: none;
+            background: var(--color-bg-secondary);
+        }
+
+        .edit-actions {
+            display: flex;
+            gap: 8px;
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            z-index: 10;
+        }
+
+        .btn-save {
+            background: var(--color-accent-primary);
+            color: white;
+            border: none;
+            padding: 6px 14px;
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            font-size: 0.9em;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .btn-cancel {
+            background: transparent;
+            color: var(--color-text-muted);
+            border: 1px solid var(--color-border-default);
+            padding: 6px 14px;
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            font-size: 0.9em;
+            font-weight: 500;
+        }
+
+        .btn-cancel:hover {
+            background: var(--color-bg-secondary);
+            color: var(--color-text-primary);
+        }
+
+        /* Editor Container Styles */
+        #editor-section {
+            background: var(--color-surface);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            margin-top: 20px;
+            border: 1px solid var(--color-border-default);
+        }
+
+        /* Toast UI Overrides */
+        .toastui-editor-defaultUI {
+            border: none !important;
+            font-family: 'Inter', sans-serif !important;
+        }
+
+        .toastui-editor-contents {
+            font-family: 'Inter', sans-serif !important;
+            font-size: 16px !important;
+        }
+
+        [data-theme="dark"] .toastui-editor-defaultUI {
+            background-color: var(--color-surface) !important;
+        }
+
+
         /* Export Dropdown */
         .export-dropdown {
             position: relative;
@@ -428,19 +508,6 @@
             border-color: var(--color-accent-primary);
         }
 
-        /* Collapsible toggles */
-        .toggle-icon {
-            display: inline-block;
-            margin-right: 8px;
-            cursor: pointer;
-            color: var(--color-text-muted);
-            transition: transform 0.2s;
-        }
-
-        .toggle-icon:hover {
-            color: var(--color-accent-primary);
-        }
-
         /* Back Link Standardized */
         .back-link {
             display: flex;
@@ -490,13 +557,11 @@
 
 <body>
     <!-- Top Navigation -->
-    <!-- Top Navigation -->
     <nav
         style="border-bottom: 1px solid var(--color-border-default); background: var(--color-surface); height: 64px; display: flex; align-items: center; padding: 0 2rem; position: sticky; top: 0; z-index: 100;">
         <div
             style="width: 100%; max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center;">
 
-            <!-- Left: Back -->
             <!-- Left: Back -->
             <a href="/" class="back-link">
                 <svg viewBox="0 0 16 16" fill="currentColor" style="width: 16px; height: 16px;">
@@ -508,10 +573,16 @@
 
             <!-- Right: Actions -->
             <div style="display: flex; gap: 12px; align-items: center;">
-                {% if not file.get('preview_mode') and not file.filename.endswith('.docx') %}
-                <button class="btn edit-btn" onclick="toggleEditMode()">
-                    <i class="bi bi-pencil-square"></i> Edit
-                </button>
+                {% if not file.get('preview_mode') %}
+                    {% if file.filename.endswith('.docx') %}
+                    <button class="btn edit-btn disabled" disabled title="Editing Word documents is not supported in-browser">
+                        <i class="bi bi-pencil-square"></i> Edit
+                    </button>
+                    {% else %}
+                    <button class="btn edit-btn" onclick="toggleEditMode()">
+                        <i class="bi bi-pencil-square"></i> Edit
+                    </button>
+                    {% endif %}
                 {% endif %}
 
                 <div class="export-dropdown">
@@ -541,34 +612,26 @@
     <!-- Main Content -->
     <div class="main-container">
         <main class="content-area">
-            <!-- Editor Container (hidden by default) -->
-            <div id="editorContainer"
-                style="display: none; position: relative; height: calc(100vh - 200px); margin-bottom: 20px;">
-                <div style="display: flex; gap: 10px; margin-bottom: 10px; justify-content: flex-end;">
-                    <button onclick="saveDocument()"
-                        style="padding: 8px 16px; background: var(--color-accent-primary); color: white; border: none; border-radius: var(--radius-md); cursor: pointer;">💾
-                        Save</button>
-                    <button onclick="toggleEditMode()"
-                        style="padding: 8px 16px; background: var(--color-surface); border: 1px solid var(--color-border-default); color: var(--color-text-primary); border-radius: var(--radius-md); cursor: pointer;">❌
-                        Cancel</button>
-                </div>
-                <div id="monaco-editor"
-                    style="height: calc(100% - 50px); border: 1px solid var(--color-border-default); border-radius: var(--radius-lg);">
-                </div>
-            </div>
-
+            
             <div id="documentContent">
                 <div class="document-header">
-                    <h1 class="document-title">{{ file.name }}</h1>
-                    <div class="document-path">
-                        <i class="bi bi-folder"></i>
-                        {{ file.filename }}
+                    <div>
+                        <h1 class="document-title">{{ file.name }}</h1>
+                        <div class="document-path">
+                            <i class="bi bi-folder"></i>
+                            {{ file.filename }}
+                        </div>
                     </div>
                 </div>
 
                 <div class="markdown-content">
                     {{ file.content | safe }}
                 </div>
+            </div>
+
+            <!-- Editor Section (Initially Hidden) -->
+            <div id="editor-section" style="display: none;">
+                <!-- Editor will be injected here -->
             </div>
         </main>
 
@@ -584,16 +647,20 @@
         <i class="bi bi-arrow-up"></i> Top
     </button>
 
+    <!-- Toast UI Editor -->
+    <script src="https://uicdn.toast.com/editor/latest/toastui-editor-all.min.js"></script>
+    <script src="https://uicdn.toast.com/editor-plugin-code-syntax-highlight/latest/toastui-editor-plugin-code-syntax-highlight-all.min.js"></script>
+
     <!-- Dependencies -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.45.0/min/vs/loader.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
 
     <!-- Core Scripts -->
     <script>
-        // Monaco & Logic Script from View.html
         const currentFilename = '{{ file.filename }}';
         const currentFilePath = '{{ file.get("relative_path", file.filename) }}';
-        let monacoEditor = null;
+        let editorInstance = null;
+        
+        // Highlight logic for view mode
         hljs.highlightAll();
 
         function generateId(text) {
@@ -670,50 +737,119 @@
 
         // --- Editor Logic ---
         function toggleEditMode() {
-            const editorContainer = document.getElementById('editorContainer');
-            const documentContent = document.getElementById('documentContent');
-            const editButton = document.querySelector('.edit-btn'); // Simple selector
+            const editorSection = document.getElementById('editor-section');
+            const docContent = document.querySelector('.markdown-content');
+            const docHeader = document.querySelector('.document-header');
+            const editBtn = document.querySelector('.edit-btn');
+            
+            if (editorSection.style.display === 'none') {
+                // SWITCH TO EDIT MODE
+                editorSection.style.display = 'block';
+                docContent.style.display = 'none';
+                
+                // Hide main edit button
+                if (editBtn) editBtn.style.display = 'none';
 
-            if (editorContainer.style.display === 'none') {
-                // Open Editor
+                // Inject controls into header
+                const controls = document.createElement('div');
+                controls.className = 'edit-actions';
+                controls.innerHTML = `
+                    <button class="btn-save" onclick="saveDocument()">
+                        <i class="bi bi-save"></i> Save Changes
+                    </button>
+                    <button class="btn-cancel" onclick="cancelEdit()">
+                        Cancel
+                    </button>
+                `;
+                docHeader.appendChild(controls);
+
                 loadDocumentSource();
-                editorContainer.style.display = 'block';
-                documentContent.style.display = 'none';
-                if (editButton) editButton.innerHTML = '❌ Cancel';
-            } else {
-                // Close Editor
-                editorContainer.style.display = 'none';
-                documentContent.style.display = 'block';
-                if (editButton) editButton.innerHTML = '✏️ Edit';
             }
         }
 
+        function cancelEdit() {
+             const editorSection = document.getElementById('editor-section');
+             const docContent = document.querySelector('.markdown-content');
+             const docHeader = document.querySelector('.document-header');
+             const editBtn = document.querySelector('.edit-btn');
+
+             // Remove Editor Controls
+             const controls = docHeader.querySelector('.edit-actions');
+             if (controls) controls.remove();
+
+             // Show Content
+             editorSection.style.display = 'none';
+             docContent.style.display = 'block';
+             
+             // Show Edit Button
+             if (editBtn) editBtn.style.display = 'inline-flex';
+        }
+
         function loadDocumentSource() {
-            if (monacoEditor) return;
+            if (editorInstance) return; // Already loaded
+
             fetch(`/api/get-source/${encodeURIComponent(currentFilePath)}`)
                 .then(r => r.json())
                 .then(data => {
-                    require.config({ path: { 'vs': 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.45.0/min/vs' } });
-                    require(['vs/editor/editor.main'], function () {
-                        const theme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'vs-dark' : 'vs';
-                        monacoEditor = monaco.editor.create(document.getElementById('monaco-editor'), {
-                            value: data.content,
-                            language: 'markdown',
-                            theme: theme,
-                            automaticLayout: true
-                        });
+                    if (data.error) {
+                         alert('Cannot load source: ' + data.error);
+                         cancelEdit();
+                         return;
+                    }
+
+                    // Initialize Toast UI Editor
+                    const theme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
+                    
+                    editorInstance = new toastui.Editor({
+                        el: document.querySelector('#editor-section'),
+                        height: '700px',
+                        initialEditType: 'wysiwyg',
+                        previewStyle: 'vertical',
+                        initialValue: data.content,
+                        theme: theme,
+                        usageStatistics: false,
+                        toolbarItems: [
+                            ['heading', 'bold', 'italic', 'strike'],
+                            ['hr', 'quote'],
+                            ['ul', 'ol', 'task', 'indent', 'outdent'],
+                            ['table', 'image', 'link'],
+                            ['code', 'codeblock']
+                        ]
                     });
+                })
+                .catch(err => {
+                    alert('Failed to load document source: ' + err);
+                    console.error(err);
+                    cancelEdit();
                 });
         }
 
         function saveDocument() {
-            if (!monacoEditor) return;
-            const content = monacoEditor.getValue();
+            if (!editorInstance) return;
+            const content = editorInstance.getMarkdown();
+            
+            const saveBtn = document.querySelector('.btn-save');
+            const origText = saveBtn.innerHTML;
+            saveBtn.innerHTML = '<i class="bi bi-hourglass-split"></i> Saving...';
+            saveBtn.disabled = true;
+
             fetch('/api/save-document', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ filename: currentFilePath, content: content })
-            }).then(() => window.location.reload());
+            })
+            .then(r => {
+                if(r.ok) {
+                    window.location.reload(); 
+                } else {
+                    return r.json().then(d => { throw new Error(d.error || 'Save failed') });
+                }
+            })
+            .catch(e => {
+                alert('Error saving document: ' + e.message);
+                saveBtn.innerHTML = origText;
+                saveBtn.disabled = false;
+            });
         }
 
         // --- Export & Misc ---
@@ -724,24 +860,15 @@
             if (!e.target.closest('.export-dropdown')) document.getElementById('exportMenu').classList.remove('show');
         });
 
-        // Stub functions for PDF/Word (using same fetch logic as before but simplified)
-        function exportToPDF() {
-            // ... existing logic ...
-            alert('Export started... (Simplified for rewrite)');
-            // In real impl, reuse the fetch logic. 
-            // For safety, I will assume the previous fetch logic works and copy it if needed.
-            // But to be concise I am simplifying.
-            // Wait, user needs this TO WORK. I should copy the full fetch logic.
-            performExport('/export-pdf', 'pdf');
-        }
+        function exportToPDF() { performExport('/export-pdf', 'pdf'); }
         function exportToWord() { performExport('/export-word', 'docx'); }
 
         function performExport(endpoint, ext) {
             const btn = document.querySelector('.export-main-btn');
             const orig = btn.innerHTML;
-            btn.innerHTML = '⏳';
+            btn.innerHTML = '<i class="bi bi-hourglass-split"></i>';
 
-            const html = document.documentElement.outerHTML; // Simplified grab
+            const html = document.documentElement.outerHTML; 
             fetch(endpoint, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -758,8 +885,6 @@
                 btn.innerHTML = orig;
             });
         }
-
-        // Force Theme Toggle logic replaced by ThemeManager in theme.js
 
         // Init icon state on load
         document.addEventListener('DOMContentLoaded', () => {

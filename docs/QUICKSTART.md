@@ -6,7 +6,7 @@
 ```bash
 # Clone repository
 git clone <repository-url>
-cd Md_File_Reader
+cd DocNexus
 
 # Create virtual environment
 python -m venv .venv
@@ -31,29 +31,29 @@ pre-commit install
 python run.py
 
 # Or use CLI
-docpresent start --debug
+docnexus start --debug
 
 # Production/Release mode (debug OFF)
 set PRODUCTION=true
 python run.py
 
 # Custom host/port
-docpresent start --host 0.0.0.0 --port 5000
+docnexus start --host 0.0.0.0 --port 5000
 ```
 
 ### Code Quality
 ```bash
 # Format code
-black doc_viewer/
+black docnexus/
 
 # Sort imports
-isort doc_viewer/
+isort docnexus/
 
 # Lint
-flake8 doc_viewer/
+flake8 docnexus/
 
 # Type check
-mypy doc_viewer/
+mypy docnexus/
 
 # Run all pre-commit hooks
 pre-commit run --all-files
@@ -65,7 +65,7 @@ pre-commit run --all-files
 pytest
 
 # With coverage report
-pytest --cov=doc_viewer --cov-report=html
+pytest --cov=docnexus --cov-report=html
 
 # Run specific test file
 pytest tests/test_toc.py
@@ -91,13 +91,13 @@ pyinstaller DocNexus.spec
 ### Common Tasks
 ```bash
 # Check what would change before formatting
-black --check doc_viewer/
+black --check docnexus/
 
 # Show what isort would change
-isort --check-only --diff doc_viewer/
+isort --check-only --diff docnexus/
 
 # Generate coverage report
-pytest --cov=doc_viewer --cov-report=html
+pytest --cov=docnexus --cov-report=html
 # Open htmlcov/index.html in browser
 
 # Clean build artifacts
@@ -144,13 +144,13 @@ pip install -e .
 ### Usage
 ```bash
 # Start server
-docpresent start
+docnexus start
 
 # With options
-docpresent start --host localhost --port 8000 --debug
+docnexus start --host localhost --port 8000 --debug
 
 # Show version
-docpresent --version
+docnexus --version
 ```
 
 ### Quick Launch (Windows)
@@ -209,8 +209,8 @@ lsof -ti:8000 | xargs kill -9
 
 ## Project Structure
 ```
-Md_File_Reader/
-├── doc_viewer/          # Main package
+DocNexus/
+├── docnexus/          # Main package
 │   ├── app.py          # Flask application
 │   ├── cli.py          # Command-line interface
 │   ├── core/           # Core rendering
