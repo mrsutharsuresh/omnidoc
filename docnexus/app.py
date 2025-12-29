@@ -928,6 +928,7 @@ def view_file(filename):
     file_info = {
         'name': file_path.stem,
         'filename': file_path.name,
+        'relative_path': str(file_path.relative_to(MD_FOLDER)),
         'content': html_content,
         'modified': datetime.fromtimestamp(stat.st_mtime).strftime('%Y-%m-%d %H:%M:%S'),
         'size': f"{stat.st_size / 1024:.2f} KB"
