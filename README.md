@@ -3,7 +3,7 @@
 > **The Ultimate All-in-One Document Engine.**  
 > *Authority. Universality. Power.*
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![License: AGPL v3](https://img.shields.io/badge/License-AGPL_v3-blue.svg)](https://www.gnu.org/licenses/agpl-3.0)
 [![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
 [![Build Status](https://img.shields.io/badge/build-passing-brightgreen.svg)](https://github.com/omnidoc-org/docnexus)
 
@@ -67,6 +67,7 @@ pip install -e .
 python run.py
 # or
 ./make.ps1 setup
+./make.ps1 release
 ./make.ps1 start
 ```
 
@@ -87,4 +88,4 @@ We welcome contributions! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for deta
 
 ## 📄 License
 
-DocNexus is proudly open source under the [MIT License](LICENSE).
+DocNexus is proudly open source under the [GNU Affero General Public License v3 (AGPLv3)](LICENSE).

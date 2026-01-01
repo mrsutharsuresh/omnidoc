@@ -80,8 +80,8 @@ function Invoke-Build {
     Write-Host ""
     
     if (-not (Test-Path $Python)) {
-        Write-Host "ERROR: Build venv not found. Run '.\make.ps1 setup' first" -ForegroundColor Red
-        exit 1
+        Write-Host "Build environment missing. Running setup..." -ForegroundColor Yellow
+        Invoke-Setup
     }
     
     # Force reinstall dependencies to ensure latest versions
@@ -196,13 +196,45 @@ function Invoke-Release {
 function Invoke-Start {
     Write-Host "Starting latest release..." -ForegroundColor Yellow
     Write-Host ""
-    & "$ProjectRoot\scripts\start-release.ps1"
+    
+    $LatestLink = "$ProjectRoot\dist\latest"
+    $ExePath = ""
+
+    if (Test-Path $LatestLink) {
+        $ExePath = Get-ChildItem "$LatestLink\DocNexus_v*.exe" | Select-Object -ExpandProperty FullName -First 1
+    }
+    
+    if (-not $ExePath) {
+        # Fallback: Find latest in archive
+        $LatestArchive = Get-ChildItem "$ProjectRoot\dist\archive" -Directory | Sort-Object LastWriteTime -Descending | Select-Object -First 1
+        if ($LatestArchive) {
+            $ExePath = Get-ChildItem "$LatestArchive\DocNexus_v*.exe" | Select-Object -ExpandProperty FullName -First 1
+        }
+    }
+
+    if ($ExePath -and (Test-Path $ExePath)) {
+        Write-Host "Launching: $ExePath" -ForegroundColor Cyan
+        Start-Process $ExePath
+        Write-Host "Application started." -ForegroundColor Green
+    }
+    else {
+        Write-Host "ERROR: No release executable found. Run '.\make.ps1 release' first." -ForegroundColor Red
+        exit 1
+    }
 }
 
 function Invoke-Stop {
     Write-Host "Stopping server..." -ForegroundColor Yellow
     Write-Host ""
-    & "$ProjectRoot\scripts\stop-server.ps1"
+    
+    $Processes = Get-Process | Where-Object { $_.ProcessName -like "DocNexus_v*" }
+    if ($Processes) {
+        $Processes | Stop-Process -Force
+        Write-Host "DocNexus processes stopped." -ForegroundColor Green
+    }
+    else {
+        Write-Host "No running DocNexus processes found." -ForegroundColor Yellow
+    }
 }
 
 function Invoke-Clean {
