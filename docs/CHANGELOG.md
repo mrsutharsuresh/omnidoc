@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v1.2.0] - 2026-01-02
+
+### Added
+- **Plugin System Infrastructure**: Added "Extensions" marketplace UI in Settings.
+- **Dependency**: Bundled `python-pptx` library for future PowerPoint support.
+
+
+
 ## [v1.1.4] - 2026-01-02
 
 ### Added

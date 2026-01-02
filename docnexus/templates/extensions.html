@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Extensions | DocNexus</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='theme.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='settings_menu.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='extensions.css') }}">
+</head>
+<body>
+    <header>
+        <div class="brand">
+            <a href="/" class="btn-icon">
+                <i class="fas fa-arrow-left"></i>
+            </a>
+            <span class="brand-text" style="font-size: 1.25rem;">Extensions Marketplace</span>
+        </div>
+        <div class="nav-controls">
+            <button class="btn-icon" title="Refresh Registry">
+                <i class="fas fa-sync-alt"></i>
+            </button>
+            <button class="btn-icon" title="Settings" id="settingsBtn">
+                <i class="fas fa-cog"></i>
+            </button>
+             {% include 'components/settings_menu.html' %}
+        </div>
+    </header>
+
+    <main class="extensions-container">
+        <div class="extensions-header">
+            <div>
+                <h2>Available Plugins</h2>
+                <p style="color: var(--color-text-muted);">Extend DocNexus with official and community plugins.</p>
+            </div>
+            <div class="search-bar" style="width: 250px;">
+                <i class="fas fa-search"></i>
+                <input type="text" placeholder="Search extensions...">
+            </div>
+        </div>
+
+        <div class="extensions-grid" id="pluginGrid">
+            <!-- Loading State -->
+            <div style="grid-column: 1/-1; text-align: center; padding: 4rem;">
+                <i class="fas fa-spinner fa-spin" style="font-size: 2rem; color: var(--primary);"></i>
+                <p style="margin-top: 1rem;">Loading Registry...</p>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Separate JS logic for Extensions Page
+        document.addEventListener('DOMContentLoaded', () => {
+             fetchRegistry();
+        });
+
+        async function fetchRegistry() {
+            try {
+                // Mock Registry Fetch for v1.2.0 Demo
+                // In production, this calls /api/plugins/registry
+                const plugins = [
+                    {
+                        id: 'pdf-pro',
+                        name: 'PDF Professional',
+                        desc: 'Export to PDF using wkhtmltopdf engine. Includes auto-installer.',
+                        icon: 'fa-file-pdf',
+                        enabled: false
+                    },
+                    {
+                        id: 'ppt-connect',
+                        name: 'PowerPoint Connect',
+                        desc: 'Import/Export .pptx slides. Requires auth token for private repo.',
+                        icon: 'fa-file-powerpoint',
+                        enabled: false
+                    }
+                ];
+                
+                renderPlugins(plugins);
+            } catch (err) {
+                console.error(err);
+            }
+        }
+
+        function renderPlugins(plugins) {
+            const grid = document.getElementById('pluginGrid');
+            grid.innerHTML = plugins.map(p => `
+                <div class="extension-card">
+                    <div style="display:flex; justify-content:space-between;">
+                        <div class="extension-icon">
+                            <i class="fas ${p.icon}"></i>
+                        </div>
+                        <span class="status-badge ${p.enabled ? 'enabled' : ''}">${p.enabled ? 'Installed' : 'Available'}</span>
+                    </div>
+                    <div class="extension-meta">
+                        <div class="extension-title">${p.name}</div>
+                        <div class="extension-desc">${p.desc}</div>
+                    </div>
+                    <div class="extension-actions">
+                        <button class="btn btn-sm ${p.enabled ? 'btn-secondary' : 'btn-primary'}" 
+                                onclick="togglePlugin('${p.id}')">
+                            ${p.enabled ? 'Configure' : 'Install'}
+                        </button>
+                        <a href="#" style="font-size: 0.9rem; color: var(--color-text-link);">Details</a>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function togglePlugin(id) {
+            alert('Install logic for ' + id + ' coming in next step!');
+        }
+    </script>
+</body>
+</html>

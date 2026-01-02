@@ -1826,6 +1826,11 @@ def browse_folder():
 # ============================================================================
 
 
+
+@app.route('/extensions')
+def extensions_page():
+    return render_template('extensions.html', version=__version__)
+
 @app.route('/api/search')
 def search_files():
     """Full-text search through workspace documents."""
