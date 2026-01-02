@@ -1825,5 +1825,40 @@ def browse_folder():
 # END NEW ROUTES
 # ============================================================================
 
+
+@app.route('/api/search')
+def search_files():
+    """Full-text search through workspace documents."""
+    query = request.args.get('q', '').lower().strip()
+    if not query:
+        return jsonify([])
+    
+    matches = []
+    # Reuse existing logic to get file list
+    all_files = get_markdown_files()
+    
+    for file_info in all_files:
+        # Check filename match first (fastest)
+        # Note: 'name' is filename without extension, 'filename' is with extension
+        # We search both to be safe
+        if query in file_info['name'].lower() or query in file_info['filename'].lower():
+            matches.append(file_info['relative_path'])
+            continue
+            
+        # Check content match
+        file_path = file_info.get('path')
+        
+        # Only search text-based files
+        if file_path and file_path.suffix.lower() in ['.md', '.txt', '.markdown']:
+            try:
+                with open(file_path, 'r', encoding='utf-8', errors='ignore') as f:
+                    content = f.read().lower()
+                    if query in content:
+                        matches.append(file_info['relative_path'])
+            except Exception:
+                continue # Skip unreadable files
+                
+    return jsonify(matches)
+
 if __name__ == '__main__':
     app.run(debug=True, host='localhost', port=8000)

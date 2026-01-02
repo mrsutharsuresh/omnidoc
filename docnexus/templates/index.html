@@ -584,7 +584,8 @@
 
         <div class="grid" id="fileGrid">
             {% for file in files %}
-            <a href="{{ url_for('view_file', filename=file.name) }}" class="card type-{{ file.type }}">
+            <a href="{{ url_for('view_file', filename=file.name) }}" class="card type-{{ file.type }}"
+                data-path="{{ file.relative_path }}" data-name="{{ file.name|lower }}">
                 <div class="card-icon">
                     {% if file.type == 'md' %}
                     <i class="fab fa-markdown"></i>
@@ -667,19 +668,44 @@
     </div>
 
     <script>
-        // Search functionality
+        // Search functionality with Backend Integration
+        let searchTimeout;
         document.getElementById('searchInput').addEventListener('keyup', function (e) {
-            const term = e.target.value.toLowerCase();
+            const term = e.target.value.trim();
             const cards = document.querySelectorAll('.card');
 
-            cards.forEach(card => {
-                const title = card.querySelector('.card-title').textContent.toLowerCase();
-                if (title.includes(term)) {
-                    card.style.display = 'flex';
-                } else {
-                    card.style.display = 'none';
-                }
-            });
+            clearTimeout(searchTimeout);
+
+            if (!term) {
+                cards.forEach(card => card.style.display = 'flex');
+                return;
+            }
+
+            searchTimeout = setTimeout(() => {
+                const searchIcon = document.querySelector('.search-wrapper i');
+                if (searchIcon) searchIcon.className = 'fas fa-spinner fa-spin';
+
+                fetch('/api/search?q=' + encodeURIComponent(term))
+                    .then(r => r.json())
+                    .then(matches => {
+                        // Matches is list of relative paths
+                        cards.forEach(card => {
+                            const path = card.dataset.path;
+                            // Also check name as fallback for immediate feedback or if API fails
+                            const nameMatch = card.dataset.name && card.dataset.name.includes(term.toLowerCase());
+
+                            if (matches.includes(path) || nameMatch) {
+                                card.style.display = 'flex';
+                            } else {
+                                card.style.display = 'none';
+                            }
+                        });
+                    })
+                    .catch(console.error)
+                    .finally(() => {
+                        if (searchIcon) searchIcon.className = 'fas fa-search';
+                    });
+            }, 300);
         });
 
         // Modal Logic

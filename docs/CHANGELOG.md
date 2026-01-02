@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v1.1.4] - 2026-01-02
+
+### Added
+- **Full-Text Search**: Enhanced search to browse through the content of documents (.md, .txt) in the workspace, not just filenames.
+- **Search Feedback**: Added loading spinner to search icon during backend search operations.
+
+
+
 ## [v1.1.3] - 2026-01-02
 
 ### Added
