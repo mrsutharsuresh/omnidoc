@@ -12,73 +12,69 @@ if (-not (Test-Path $Output)) { New-Item -ItemType Directory -Path $Output | Out
 Write-Host "Building DocNexus v$Version..."
 Write-Host "Using PyInstaller..."
 
-& $PyInstaller --noconfirm --clean `
-    --name "DocNexus_v$Version" `
-    --icon "$ProjectRoot\docnexus\static\logo.ico" `
-    --onefile `
-    --add-data "$ProjectRoot\docnexus\templates;docnexus\templates" `
-    --add-data "$ProjectRoot\docnexus\static;docnexus\static" `
-    --paths "$ProjectRoot" `
-    --hidden-import "docnexus.features.smart_convert" `
-    --hidden-import "engineio.async_drivers.threading" `
-    --hidden-import "pymdownx" `
-    --hidden-import "pymdownx.betterem" `
-    --hidden-import "pymdownx.superfences" `
-    --hidden-import "pymdownx.tabbed" `
-    --hidden-import "pymdownx.details" `
-    --hidden-import "pymdownx.magiclink" `
-    --hidden-import "pymdownx.tasklist" `
-    --hidden-import "pymdownx.arithmatex" `
-    --hidden-import "pymdownx.highlight" `
-    --hidden-import "pymdownx.inlinehilite" `
-    --hidden-import "pymdownx.keys" `
-    --hidden-import "pymdownx.smartsymbols" `
-    --hidden-import "pymdownx.snippets" `
-    --hidden-import "pymdownx.tilde" `
-    --hidden-import "pymdownx.caret" `
-    --hidden-import "pymdownx.mark" `
-    --hidden-import "pymdownx.emoji" `
-    --hidden-import "pymdownx.saneheaders"
-    
-if (Test-Path "$ProjectRoot\docnexus\plugins_dev") {
-    $Params += @("--add-data", "$ProjectRoot\docnexus\plugins_dev;docnexus\plugins_dev")
-    Write-Host "Detected plugins_dev, adding to build..." -ForegroundColor Cyan
+# Base PyInstaller Arguments
+$PyInstallerArgs = @(
+    "--noconfirm",
+    "--clean",
+    "--name", "DocNexus_v$Version",
+    "--icon", "$ProjectRoot\docnexus\static\logo.ico",
+    "--onefile",
+    "--add-data", "$ProjectRoot\docnexus\templates;docnexus\templates",
+    "--add-data", "$ProjectRoot\docnexus\static;docnexus\static",
+    "--paths", "$ProjectRoot",
+    "--distpath", "$Output",
+    "--workpath", "$BuildDir\temp",
+    "--specpath", "$BuildDir\spec"
+)
+
+# Standard Hidden Imports
+$HiddenImports = @(
+    "docnexus.features",
+    "docnexus.features.smart_convert",
+    "engineio.async_drivers.threading",
+    "pymdownx",
+    "pymdownx.betterem", 
+    "pymdownx.superfences",
+    "pymdownx.tabbed",
+    "pymdownx.details",
+    "pymdownx.magiclink",
+    "pymdownx.tasklist",
+    "pymdownx.arithmatex",
+    "pymdownx.highlight",
+    "pymdownx.inlinehilite",
+    "pymdownx.keys",
+    "pymdownx.smartsymbols",
+    "pymdownx.snippets",
+    "pymdownx.tilde",
+    "pymdownx.caret",
+    "pymdownx.mark",
+    "pymdownx.emoji",
+    "pymdownx.saneheaders"
+)
+
+foreach ($import in $HiddenImports) {
+    $PyInstallerArgs += "--hidden-import"
+    $PyInstallerArgs += $import
 }
 
-& $PyInstaller --noconfirm --clean `
-    --name "DocNexus_v$Version" `
-    --icon "$ProjectRoot\docnexus\static\logo.ico" `
-    --onefile `
-    --add-data "$ProjectRoot\docnexus\templates;docnexus\templates" `
-    --add-data "$ProjectRoot\docnexus\static;docnexus\static" `
-    --paths "$ProjectRoot" `
-    --hidden-import "docnexus.features.smart_convert" `
-    --hidden-import "engineio.async_drivers.threading" `
-    --hidden-import "pymdownx" `
-    --hidden-import "pymdownx.betterem" `
-    --hidden-import "pymdownx.superfences" `
-    --hidden-import "pymdownx.tabbed" `
-    --hidden-import "pymdownx.details" `
-    --hidden-import "pymdownx.magiclink" `
-    --hidden-import "pymdownx.tasklist" `
-    --hidden-import "pymdownx.arithmatex" `
-    --hidden-import "pymdownx.highlight" `
-    --hidden-import "pymdownx.inlinehilite" `
-    --hidden-import "pymdownx.keys" `
-    --hidden-import "pymdownx.smartsymbols" `
-    --hidden-import "pymdownx.snippets" `
-    --hidden-import "pymdownx.tilde" `
-    --hidden-import "pymdownx.caret" `
-    --hidden-import "pymdownx.mark" `
-    --hidden-import "pymdownx.emoji" `
-    --hidden-import "pymdownx.saneheaders" `
-    @Params `
-    --distpath "$Output" `
-    --workpath "$BuildDir\temp" `
-    --specpath "$BuildDir" `
-    "$ProjectRoot\run.py"
+# Conditional: Premium Plugins
+$PluginsDevPath = Join-Path $ProjectRoot "docnexus\plugins_dev"
+if (Test-Path $PluginsDevPath) {
+    Write-Host " [PREMIUM] Detected plugins_dev. Including in build..." -ForegroundColor Cyan
+    $PyInstallerArgs += "--add-data"
+    $PyInstallerArgs += "$PluginsDevPath;docnexus\plugins_dev"
+    
+    # We also need to help PyInstaller find the python modules inside plugins_dev
+    # Note: We can't just list them here because we don't know their names yet.
+    # We rely on the `hook-docnexus.plugins_dev.py` (created in Task 0.3) or manual entry if strict.
+    # For now, we trust the Hook algorithm to find them if we add the runtime hook.
+}
 
-Write-Host "Copying documentation..."
-Copy-Item -Path "$ProjectRoot\docs" -Destination "$Output\docs" -Recurse -Force
+# Run PyInstaller
+Write-Host "Running command: $PyInstaller $PyInstallerArgs"
+& $PyInstaller $PyInstallerArgs "$ProjectRoot\docnexus\app.py"
 
-Write-Host "Build Complete: $Output\DocNexus_v$Version.exe" -ForegroundColor Green
+if ($LASTEXITCODE -ne 0) {
+    Write-Error "PyInstaller failed with exit code $LASTEXITCODE"
+}
+Write-Host "Build Complete! Output in $Output" -ForegroundColor Green
