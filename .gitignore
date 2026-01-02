@@ -1,13 +1,15 @@
-# Python
 __pycache__/
 *.py[cod]
 *$py.class
 *.so
 .Python
-build/output/
+env/
+# build/ <- Removed to allow build scripts
 build/venv/
+build/output/
 build/temp/
-build/*.spec
+build/pyinstaller/
+docnexus.spec
 develop-eggs/
 dist/
 downloads/
@@ -22,22 +24,13 @@ wheels/
 *.egg-info/
 .installed.cfg
 *.egg
-MANIFEST
-
-# Virtual Env
-venv/
-env/
-ENV/
-.venv/
-
-# IDEs
-.idea/
-.vscode/
-*.swp
-
-# OmniDoc specific
+.pytest_cache/
+.coverage
+htmlcov/
+site/
+.DS_Store
+workspace/
 logs/
-instance/
-config.json
-backup/
-*.bak
+bin/
+# Local Dev
+docnexus/plugins_dev/

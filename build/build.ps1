@@ -38,7 +38,41 @@ Write-Host "Using PyInstaller..."
     --hidden-import "pymdownx.caret" `
     --hidden-import "pymdownx.mark" `
     --hidden-import "pymdownx.emoji" `
+    --hidden-import "pymdownx.saneheaders"
+    
+if (Test-Path "$ProjectRoot\docnexus\plugins_dev") {
+    $Params += @("--add-data", "$ProjectRoot\docnexus\plugins_dev;docnexus\plugins_dev")
+    Write-Host "Detected plugins_dev, adding to build..." -ForegroundColor Cyan
+}
+
+& $PyInstaller --noconfirm --clean `
+    --name "DocNexus_v$Version" `
+    --icon "$ProjectRoot\docnexus\static\logo.ico" `
+    --onefile `
+    --add-data "$ProjectRoot\docnexus\templates;docnexus\templates" `
+    --add-data "$ProjectRoot\docnexus\static;docnexus\static" `
+    --paths "$ProjectRoot" `
+    --hidden-import "docnexus.features.smart_convert" `
+    --hidden-import "engineio.async_drivers.threading" `
+    --hidden-import "pymdownx" `
+    --hidden-import "pymdownx.betterem" `
+    --hidden-import "pymdownx.superfences" `
+    --hidden-import "pymdownx.tabbed" `
+    --hidden-import "pymdownx.details" `
+    --hidden-import "pymdownx.magiclink" `
+    --hidden-import "pymdownx.tasklist" `
+    --hidden-import "pymdownx.arithmatex" `
+    --hidden-import "pymdownx.highlight" `
+    --hidden-import "pymdownx.inlinehilite" `
+    --hidden-import "pymdownx.keys" `
+    --hidden-import "pymdownx.smartsymbols" `
+    --hidden-import "pymdownx.snippets" `
+    --hidden-import "pymdownx.tilde" `
+    --hidden-import "pymdownx.caret" `
+    --hidden-import "pymdownx.mark" `
+    --hidden-import "pymdownx.emoji" `
     --hidden-import "pymdownx.saneheaders" `
+    @Params `
     --distpath "$Output" `
     --workpath "$BuildDir\temp" `
     --specpath "$BuildDir" `
