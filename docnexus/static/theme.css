@@ -253,10 +253,110 @@ body {
     box-shadow: var(--shadow-sm);
 }
 
+
 .btn-icon:disabled,
 .btn-icon.disabled {
     opacity: 0.5;
     cursor: not-allowed;
     pointer-events: none;
     background: var(--color-bg-secondary);
+}
+
+/* --- Header & Brand (Shared) --- */
+header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.25rem 2.5rem;
+    background: var(--bg-glass-strong);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--color-border-default);
+    z-index: 100;
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    text-decoration: none;
+}
+
+.brand-logo {
+    width: 42px;
+    height: 42px;
+    border-radius: 10px;
+    object-fit: contain;
+    background: rgba(255, 255, 255, 0.05);
+    box-shadow: var(--shadow-glow);
+}
+
+.brand-text {
+    font-size: 1.5rem;
+    font-weight: 700;
+    background: linear-gradient(135deg, #fff 0%, #cbd5e1 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    letter-spacing: -0.02em;
+}
+
+[data-theme="light"] .brand-text {
+    background: linear-gradient(135deg, #1e293b 0%, #475569 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.brand-version {
+    font-size: 0.75rem;
+    background: rgba(99, 102, 241, 0.1);
+    color: var(--color-accent-primary);
+    padding: 2px 8px;
+    border-radius: 99px;
+    border: 1px solid rgba(99, 102, 241, 0.2);
+    font-weight: 600;
+    margin-left: 0.5rem;
+}
+
+.nav-controls {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+}
+
+/* Shared Search Bar Style */
+.search-bar {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--color-border-default);
+    border-radius: 99px;
+    padding: 0.6rem 1.2rem;
+    display: flex;
+    align-items: center;
+    width: 350px;
+    transition: all 0.2s ease;
+}
+
+.search-bar:focus-within {
+    border-color: var(--color-accent-primary);
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.search-bar i {
+    color: var(--color-text-muted);
+    margin-right: 0.5rem;
+}
+
+.search-bar input {
+    background: transparent;
+    border: none;
+    color: var(--color-text-primary);
+    width: 100%;
+    font-family: var(--font-body);
+    font-size: 0.95rem;
+}
+
+.search-bar input::placeholder {
+    color: var(--color-text-muted);
+    opacity: 0.7;
 }

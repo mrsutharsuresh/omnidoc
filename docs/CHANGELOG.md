@@ -7,6 +7,7 @@ All notable changes to this project will be documented in this file.
 ### Added
 - **Plugin System Infrastructure**: Added "Extensions" marketplace UI in Settings.
 - **Extensions UI**: Polished the Marketplace with a premium design (Glassmorphism, Gradient Headers, Verified Badges).
+- **Theme Consistency**: Unified header and brand styling across Main and Extensions pages by centralizing CSS.
 - **Dependency**: Bundled `python-pptx` library for future PowerPoint support.
 
 

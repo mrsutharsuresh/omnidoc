@@ -17,14 +17,23 @@
 
 <body>
     <header>
-        <div class="brand">
-            <a href="/" class="btn-icon" title="Back to Workspace">
-                <i class="fas fa-arrow-left"></i>
-            </a>
-            <span class="brand-text" style="font-size: 1.25rem;">DocNexus <span
-                    style="font-weight:400; color:var(--text-muted);">Extensions</span></span>
-        </div>
+        <a href="/" class="brand" title="Back to Workspace">
+            <img src="{{ url_for('static', filename='logo.png') }}" alt="DocNexus Logo" class="brand-logo"
+                onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📄</text></svg>'">
+            <div>
+                <span class="brand-text">DocNexus</span>
+                <span class="brand-version"
+                    style="background: rgba(16, 185, 129, 0.1); color: #10b981; border-color: rgba(16, 185, 129, 0.2);">Extensions</span>
+            </div>
+        </a>
         <div class="nav-controls">
+            <!-- Global "Extensions" Search (Moved from body) -->
+            <div class="search-bar" style="width: 280px;">
+                <i class="fas fa-search"></i>
+                <input type="text" placeholder="Search extensions...">
+            </div>
+
+            <!-- Refresh Button -->
             <button class="btn-icon" title="Refresh Registry">
                 <i class="fas fa-sync-alt"></i>
             </button>
@@ -45,10 +54,7 @@
             </div>
 
             <div class="marketplace-controls">
-                <div class="search-bar" style="width: 300px;">
-                    <i class="fas fa-search"></i>
-                    <input type="text" placeholder="Search extensions...">
-                </div>
+                <!-- Search moved to header -->
             </div>
         </div>
 
