@@ -43,6 +43,7 @@ All notable changes to this project will be documented in this file.
 - **Visual Alignment**: Resolved spacing and alignment discrepancies in settings submenu toggles.
 - **Export Functionality**: Fixed broken PDF/Word export actions in `view.html` by correcting ID selectors and updating icons.
 - **JS Stability**: Fixed critical JavaScript syntax error in `view.html` that caused interactive buttons (Edit, Top, Export) to fail.
+- **PDF Export**: Fixed clientswide error handling to display alert messages instead of downloading corrupt files when export fails (e.g. missing wkhtmltopdf).
 
 ## [v1.0.1] - 2025-12-28
 

@@ -936,7 +936,10 @@
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ html: html, filename: currentFilename.replace(/.md$/, '.' + ext) })
             })
-                .then(r => r.blob())
+                .then(r => {
+                    if (r.ok) return r.blob();
+                    return r.json().then(data => { throw new Error(data.message || data.error || 'Export failed') });
+                })
                 .then(blob => {
                     const url = window.URL.createObjectURL(blob);
                     const a = document.createElement('a');
@@ -946,7 +949,7 @@
                     btn.innerHTML = orig;
                 })
                 .catch(e => {
-                    alert('Export failed: ' + e);
+                    alert('Export Error: ' + e.message);
                     btn.innerHTML = orig;
                 });
         }
