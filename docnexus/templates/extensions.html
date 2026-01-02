@@ -13,6 +13,13 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='theme.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='settings_menu.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='extensions.css') }}">
+    <script>
+        // Init theme immediately to prevent FOUC
+        (function () {
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            document.documentElement.setAttribute('data-theme', savedTheme);
+        })();
+    </script>
 </head>
 
 <body>
@@ -70,8 +77,8 @@
         <div class="extensions-grid" id="pluginGrid">
             <!-- Loading State -->
             <div style="grid-column: 1/-1; text-align: center; padding: 4rem;">
-                <i class="fas fa-spinner fa-spin" style="font-size: 2rem; color: var(--primary);"></i>
-                <p style="margin-top: 1rem; color: var(--text-muted);">Loading Registry...</p>
+                <i class="fas fa-spinner fa-spin" style="font-size: 2rem; color: var(--color-accent-primary);"></i>
+                <p style="margin-top: 1rem; color: var(--color-text-muted);">Loading Registry...</p>
             </div>
         </div>
     </main>
@@ -80,6 +87,7 @@
         // Separate JS logic for Extensions Page
         document.addEventListener('DOMContentLoaded', () => {
             // Simulate slight network delay for effect
+            // Ensure theme manager init is called if not handled by script below (it is)
             setTimeout(fetchRegistry, 600);
         });
 
@@ -156,6 +164,7 @@
             alert('Install logic for ' + id + ' coming in next phase!');
         }
     </script>
+    <script src="{{ url_for('static', filename='theme.js') }}"></script>
 </body>
 
 </html>
