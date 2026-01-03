@@ -1136,7 +1136,7 @@ def preview_file():
                     'preview_mode': True
                 }
                 
-                return render_template('view.html', file=file_info)
+                return render_template('view.html', file=file_info, version=VERSION)
                 
             except Exception as e:
                 logger.error(f"Error processing Word document: {e}", exc_info=True)
@@ -1195,7 +1195,7 @@ def preview_file():
         'preview_mode': True
     }
     
-    return render_template('view.html', file=file_info)
+    return render_template('view.html', file=file_info, version=VERSION)
 
 @app.route('/export-pdf', methods=['POST'])
 def export_pdf():
