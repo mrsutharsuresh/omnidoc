@@ -1933,7 +1933,7 @@ def browse_folder():
 
 @app.route('/extensions')
 def extensions_page():
-    return render_template('extensions.html', version=__version__)
+    return render_template('extensions.html', version=VERSION)
 
 @app.route('/api/search')
 def search_files():
