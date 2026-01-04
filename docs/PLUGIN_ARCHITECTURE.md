@@ -90,6 +90,18 @@ def get_features(self) -> List[Any]:
     ]
 ```
 
+### 6. Export Handlers (Format Plugins)
+
+Plugins can register `EXPORT_HANDLER` features to take over document conversion for specific formats.
+
+#### Architecture
+*   **Request**: `POST /api/export/<format_ext>` (e.g., `pdf`, `docx`)
+*   **Resolution**: `FeatureManager.get_export_handler(format_ext)` looks for a registered feature.
+*   **Execution**:
+    *   **Handler Found**: Calls `handler(html_content, filename)`.
+    *   **Handler Missing**: Returns `404 Handler Not Found` with metadata.
+*   **Frontend**: `view.html` inspects the error. If it's a "Missing Handler", it triggers the **"Install Plugin"** modal (Upsell flow).
+
 ## Usage
 
 ### Registration
